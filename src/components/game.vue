@@ -84,7 +84,55 @@
       </div>
       <!-- 首页列表 -->
       <div class="sy_list">
-        <div class="list_hero">
+         <yd-infinitescroll :callback="loadList" ref="infinitescrollDemo">
+            <yd-list theme="2" slot="list">
+              <div class="list_hero" v-for="(item, index) in list" :key="index">
+                <div class="list_img"><img :src="item.img"></div>
+                <div class="hero_wz" v-if="item.btn_zt==1">
+                    <p class="list_tit">{{item.title}}</p>
+                      <div class="list_zt">
+                      <p class="xz_zt"><span class="xzsd">{{item.xzsd}}MB<span class="jxzsd">+{{item.jxzsd}}MB/s</span></span><span class="xzjd">{{item.xzjd}}</span></p>
+                      <p class="xz_jdt"><yd-progressbar type="line" :progress="item.progress" trail-width="1" trail-color="#fe814a"></yd-progressbar></p>
+                    </div>
+                </div>
+                <div class="hero_wz" v-else-if="item.btn_zt==2">
+                    <p class="list_tit">{{item.title}}</p>
+                    <div class="list_zt">
+                      <p class="xz_zt"><span class="zt_sp">已暂停</span><span class="xzjd">{{item.xzjd}}</span></p>
+                      <p class="xz_jdt"><yd-progressbar type="line" :progress="item.progress" trail-width="1" trail-color="#fe814a"></yd-progressbar></p>
+                      
+                    </div>
+                </div>
+                <div class="hero_wz" v-else>
+                    <p class="list_tit">{{item.title}}</p>
+                    <p class="list_xz"><span class="xz_l">{{item.xzl}}</span>万次下载</p>
+                    <div class="list_zt">
+                        <p class="hero_jj">{{item.jianjie}}</p>
+                        <p class="hero_zt"> 
+                          <a href="" class="zt_hh">回合</a>
+                          <a href="" class="zt_xx">休闲</a>
+                          <a href="" class="zt_3d">3D</a>
+                          <a href="" class="zt_zbqb">正版Q版</a>
+                        </p>
+                    </div>
+                </div>
+                <div class="list_btn">
+                    <a href="" v-if="item.btn_zt==1" class="a_btn hero_zt" >暂停</a>
+                    <a href="" v-else-if="item.btn_zt==2" class="a_btn jx_btn" >继续</a>
+                    <a href="" v-else class="a_btn" >下载</a>
+                      <p class="list_rl">{{item.rl}}m</p>
+                </div>
+              </div>
+            </yd-list>
+
+            <!-- 数据全部加载完毕显示 -->
+            <span slot="doneTip">啦啦啦，啦啦啦，没有数据啦~~</span>
+
+            <!-- 加载中提示，不指定，将显示默认加载中图标 -->
+            <img slot="loadingTip" src="http://static.ydcss.com/uploads/ydui/loading/loading10.svg"/>
+
+        </yd-infinitescroll>
+        <!-- <div class="list_hero">
           <div class="list_img"><img src="../../static/img/hero_icon.png"></div>
           <div class="hero_wz">
             <p class="list_tit">青云九天</p>
@@ -124,31 +172,144 @@
           <div class="list_img"><img src="../../static/img/hero_icon.png"></div>
           <div class="hero_wz">
             <p class="list_tit">青云九天</p>
-            <p class="list_xz"><span class="xz_l">1518.3</span>万次下载</p>
-            <p class="hero_jj">19游正版Q版仙侠回合制手游</p>
-            <p class="hero_zt">
-              <a href="" class="zt_hh">回合</a>
-              <a href="" class="zt_xx">休闲</a>
-              <a href="" class="zt_3d">3D</a>
-              <a href="" class="zt_zbqb">正版Q版</a>
-            </p>
+            <div class="list_zt">
+              <p class="list_xz"><span class="xz_l">1518.3</span>万次下载</p>
+              <p class="hero_jj">19游正版Q版仙侠回合制手游</p>
+              <p class="hero_zt">
+                <a href="" class="zt_hh">回合</a>
+                <a href="" class="zt_xx">休闲</a>
+                <a href="" class="zt_3d">3D</a>
+                <a href="" class="zt_zbqb">正版Q版</a>
+              </p>
+            </div>
           </div>
           <div class="list_btn">
             <a href="" class="a_btn">下载</a>
             <p class="list_rl">60.72m</p>
           </div>
         </div>
+        <div class="list_hero">
+          <div class="list_img"><img src="../../static/img/hero_icon.png"></div>
+          <div class="hero_wz">
+            <p class="list_tit">青云九天</p>
+            <div class="list_zt">
+              <p class="xz_zt"><span class="zt_sp">已暂停</span><span class="xzjd">35.8%</span></p>
+              <p class="xz_jdt"><yd-progressbar type="line" :progress="progress4" trail-width="1" trail-color="#fe814a"></yd-progressbar></p>
+            </div>
+          </div>
+          <div class="list_btn">
+            <a href="" class="a_btn jx_btn">继续</a>
+            <p class="list_rl">60.72m</p>
+          </div>
+        </div>
+        <div class="list_hero">
+          <div class="list_img"><img src="../../static/img/hero_icon.png"></div>
+          <div class="hero_wz">
+            <p class="list_tit">青云九天</p>
+            <div class="list_zt">
+              <p class="xz_zt"><span class="xzsd">7.3MB<span class="jxzsd">+2.51MB/s</span></span><span class="xzjd">87.9%</span></p>
+              <p class="xz_jdt"><yd-progressbar type="line" :progress="progress3" trail-width="1" trail-color="#fe814a"></yd-progressbar></p>
+            </div>
+          </div>
+          <div class="list_btn">
+            <a href="" class="a_btn hero_zt">暂停</a>
+            <p class="list_rl">60.72m</p>
+          </div>
+        </div> -->
       </div>
     </div>
+     <div class="footer_nav">
+        <my-nav></my-nav>
+      </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'HelloWorld',
+  name: 'game',
   data () {
     return {
-      progress4: 0.5
+      page:1,
+      pageSize:10,
+      list:[
+        {
+          img:"../../static/img/hero_icon.png",
+          title:"青云九天",
+          jianjie:"19游正版Q版仙侠回合制手游",
+          xzl:"1518.3",
+          xzsd:"7.3",
+          jxzsd:"2.51",
+          jxzds:"2.51",
+          xzjd:"85%",
+          rl:"60.72",
+          progress:.85,
+          btn_zt:1
+        },
+        {
+          img:"../../static/img/hero_icon.png",
+          title:"青云九天",
+          jianjie:"19游正版Q版仙侠回合制手游",
+          xzl:"1518.3",
+          xzsd:"7.3",
+          jxzds:"2.51",
+          xzjd:"50%",
+          rl:"60.72",
+          progress:.50,
+          btn_zt:2
+        },
+        {
+          img:"../../static/img/hero_icon.png",
+          title:"青云九天",
+          jianjie:"19游正版Q版仙侠回合制手游",
+          xzl:"1518.3",
+          xzsd:"7.3",
+          jxzds:"2.51",
+          xzjd:"85%",
+          rl:"60.72",
+          progress:.50,
+        },
+        {
+          img:"../../static/img/hero_icon.png",
+          title:"青云九天",
+          jianjie:"19游正版Q版仙侠回合制手游",
+          xzl:"1518.3",
+          xzsd:"7.3",
+          jxzsd:"2.51",
+          jxzds:"2.51",
+          xzjd:"85%",
+          rl:"60.72",
+          progress:.85,
+          btn_zt:1
+        },
+        {
+          img:"../../static/img/hero_icon.png",
+          title:"青云九天",
+          jianjie:"19游正版Q版仙侠回合制手游",
+          xzl:"1518.3",
+          xzsd:"7.3",
+          jxzds:"2.51",
+          xzjd:"50%",
+          rl:"60.72",
+          progress:.50,
+          btn_zt:2
+        },
+        {
+          img:"../../static/img/hero_icon.png",
+          title:"青云九天",
+          jianjie:"19游正版Q版仙侠回合制手游",
+          xzl:"1518.3",
+          xzsd:"7.3",
+          jxzds:"2.51",
+          xzjd:"85%",
+          rl:"60.72",
+          progress:.50,
+        }
+      ]
+    }
+  },
+  methods:{
+    loadList(){
+    
     }
   }
 }
@@ -156,6 +317,12 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less" scoped>
+.index{
+  position: relative;
+  left: 0;
+  bottom: 0;
+  margin-bottom: .8rem;
+}
 .banner {
   img{
     width: 6.4rem;
@@ -176,7 +343,7 @@ export default {
   }
 }
 .sy_wrap{
-  padding: .3rem .29rem .7rem .29rem;
+  padding: .3rem .29rem 0 .29rem;
   overflow: hidden;
   // 新闻、秒杀nav样式
   .wrap_nav{
@@ -198,7 +365,7 @@ export default {
   // hero样式
   .sy_hero{
     margin-top: .7rem;
-    overflow: hidden;
+    display:table;
     .hero_icon{
       width: 1.8rem;
       text-align: center;
@@ -245,7 +412,7 @@ export default {
       width: .93rem;
       height: .38rem;
       display: inline-block;
-      background: #ff3f29;
+      background: #ff362b;
       color: #fff;
       font-size: .18rem;
       font-family: "黑体";
@@ -256,6 +423,9 @@ export default {
     }
     .hero_jx{
       background: #cacaca;
+    }
+    .hero_zt{
+      background: #ff5426;
     }
   }
   // 首页列表样式
@@ -277,32 +447,42 @@ export default {
       }
       .hero_wz{
         float: left;
-        margin-top: .25rem;
+        margin-top: .24rem;
         margin-left: .12rem;
+        width: 60%;
         .list_tit{
           font-size: .2rem;
           font-family: "黑体";
           color: #444;
+          line-height: .26rem;
+          height: .26rem;
         }
         .list_xz{
           font-size: .11rem;
           color: #b0b0b0;
           font-family: "黑体";
+          line-height: .15rem;
+          height: .15rem;
         }
         .hero_jj{
           font-size: .13rem;
           color: #b0b0b0;
           font-family: "黑体";
+          line-height: .17rem;
+          height: .17rem;
         }
         .hero_zt{
+          height: .14rem;
+          line-height: .14rem;
           a{
             display: inline-block;
             font-size: .1rem;
             font-family: "黑体";
             color: #fff;
-            height: .28rem;
-            line-height: .28rem;
-            width: .58rem;
+            height: .13rem;
+            line-height: .13rem;
+            padding-top: .01rem;
+            width: .28rem;
             text-align: center;
             margin-right: .12rem;
             border-radius: 1px;
@@ -317,9 +497,36 @@ export default {
             background: #23c8af;
           }
           .zt_zbqb{
-            width: 1rem;
+            width: .58rem;
             background: #fa9700;
           }
+        }
+        .xz_zt{
+          overflow: hidden;
+          height: .26rem;
+          line-height: .26rem;
+          .zt_sp{
+            float: left;
+            font-size: .13rem;
+            color: #c8c8c8;
+          }
+          .xzsd{
+            float: left;
+            font-size: .13rem;
+            color: #c8c8c8;
+            .jxzsd{
+              color: #ff5426;
+            }
+          }
+          .xzjd{
+            float: right;
+            font-size: .13rem;
+            color: #c9c9c9;
+          }
+        }
+        .xz_jdt{
+          line-height: .16rem;
+          height: .16rem;
         }
       }
       .list_btn{
@@ -338,6 +545,9 @@ export default {
           line-height: .38rem;
           border-radius: 15px;
           margin-bottom: .09rem;
+        }
+        .jx_btn{
+          background: #cacaca;
         }
         .list_rl{
           color: #c9c9c9;
