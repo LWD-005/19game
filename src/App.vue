@@ -2,20 +2,7 @@
 
 <template>
   <div id="app">
-    <router-view/>
-    <!-- <div class="footer_nav">
-      <yd-tabbar>
-        <yd-tabbar-item title="游戏" link="/" class="game">
-            
-        </yd-tabbar-item>
-        <yd-tabbar-item title="礼包" link="/libao" class="lb">
-
-        </yd-tabbar-item>
-        <yd-tabbar-item title="我的" link="/xgmm" class="wd">
-
-        </yd-tabbar-item>
-      </yd-tabbar>
-    </div> -->
+    <router-view></router-view>
   </div>
 </template>
 
@@ -26,6 +13,12 @@ export default {
 </script>
 
 <style>
+a {
+    text-decoration: none;
+}
+.router-link-active {
+    text-decoration: none;
+}
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

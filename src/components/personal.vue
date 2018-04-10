@@ -55,15 +55,13 @@
               <span class="jfcj_tit">礼包记录</span>
               <span class="wd_rg jfcj_rg"></span>
             </div>
-            <div class="wd_list mmxg">
-              <router-link to="/wode/xgmm">
+            <div class="wd_list mmxg"  @click="changepwd">
                 <img src="../../static/img/wd_mmxg.png" alt="">
                 <span class="jfcj_tit">密码修改</span>
                 <span class="wd_rg jfcj_rg"></span>
-              </router-link>
             </div>
           </div>
-          <a href="" class="jftx_btn">积分体现</a>
+          <a href="" class="jftx_btn">积分提现</a>
         </div>
       </div>
       <div class="footer_nav">
@@ -77,7 +75,14 @@
 export default {
   data(){
     return{
-      dlzt:1
+      dlzt:1,
+      
+    }
+    
+  },
+  methods:{
+    changepwd(){
+        this.$router.push({path:'/changepwd',query:{id:'changepwd1'}});
     }
   }
 }
@@ -235,6 +240,9 @@ export default {
         }
       }
     }
+    a{
+      display: block;
+    }
     .jftx_btn{
       display: block;
       margin: 0 auto;
@@ -246,7 +254,8 @@ export default {
       color: #fff;
       font-size: .24rem;
       border-radius: .25rem;
-      margin-top: 2.18rem;
+      position: relative;
+      bottom: -.5rem;
     }
 
   }
