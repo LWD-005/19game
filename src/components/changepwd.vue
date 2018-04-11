@@ -47,7 +47,8 @@
              </div>
              <input type="text" placeholder="请输入6-16位密码" class="login_ipt phone_ipt">
         </div>
-        <a href="" class=" review_btn">确认修改</a>
+        <a href="" class="review_btn register_btn">注册</a>
+         <p class="agree">注册即代表同意<a class="agree_a" href="">《19游戏用户注册协议》</a></p>
      </div>
      <!-- 登陆页 -->
     <div class="login login_page" v-else>
@@ -63,7 +64,7 @@
              </div>
              <input type="text" placeholder="请输入密码" class="login_ipt loginPage_ipt">
         </div>
-        <a href="" class="review_btn register_btn">注册</a>
+        <a href="" class="review_btn register_btn">登陆</a>
         <p class="login_p"><a @click="register" class="qRegister">快速注册</a><a class="lostPwd">忘记密码？</a></p>
     </div>
   </div>
@@ -80,7 +81,7 @@ export default {
   methods:{
      register(){
          this.$router.replace({path:'/changepwd',query:{id:'register'}});
-         this.$router.go(0)
+        window.location.reload()
      }
   },
   
@@ -216,6 +217,18 @@ export default {
                     font-size: .18rem;
                     color: #949494;
                 }
+            }
+        }
+        // 注册页样式
+        .agree{
+            text-align: center;
+            margin: 0 auto;
+            margin-top: 1rem;
+            font-size: .16rem;
+            color: #898989;
+            .agree_a{
+                color: #ff2d2c;
+                font-size: .16rem;
             }
         }
     }

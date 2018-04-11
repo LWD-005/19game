@@ -4,12 +4,15 @@ import Game from '@/components/game'
 import Giftbag from '@/components/giftbag'
 import Personal from '@/components/personal'
 import Changepwd from '@/components/changepwd'
+import CreditsLog from '@/components/personal/creditsLog'
+import PayCenter from '@/components/personal/payCenter'
 import Nav from '@/components/nav'
 
 
 Vue.use(Router)
 
 Vue.component('my-nav',Nav)
+
 
 
 export default new Router({
@@ -31,10 +34,20 @@ export default new Router({
       path:'/changepwd',
       name:'changepwd',
       component:Changepwd,
+    },{
+      path:'/personal/creditsLog',
+      name:'creditsLog',
+      component:CreditsLog,
+    }
+    ,{
+      path:'/personal/payCenter',
+      name:'payCenter',
+      component:PayCenter,
     }
   ],
   components:{
     Nav
-  }
+  },
+  
 
 })

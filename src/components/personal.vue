@@ -18,8 +18,10 @@
                 <span class="jinbi_l">9999</span>
               </div>
               <div class="chongzhi">
-                <img src="../../static/img/wd_rb.png" alt="">
-                <span class="yxcz">游戏充值</span>
+                <router-link :to="{path:'/personal/payCenter'}">
+                  <img src="../../static/img/wd_rb.png" alt="">
+                  <span class="yxcz">游戏充值</span>
+                </router-link>
               </div>
             </div>
           </div>
@@ -46,9 +48,11 @@
               <span class="wd_rg jfcj_rg"></span>
             </div>
             <div class="wd_list jfjl">
-              <img src="../../static/img/wd_jfjl.png" alt="">
-              <span class="jfcj_tit">积分记录</span>
-              <span class="wd_rg jfcj_rg"></span>
+              <router-link :to="{path:'/personal/creditsLog'}">
+                <img src="../../static/img/wd_jfjl.png" alt="">
+                <span class="jfcj_tit">积分记录</span>
+                <span class="wd_rg jfcj_rg"></span>
+              </router-link>
             </div>
             <div class="wd_list lbjl">
               <img src="../../static/img/wd_lbjl.png" alt="">

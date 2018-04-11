@@ -8,11 +8,19 @@
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
+  data(){
+    return{
+      imgSrc:'../../../static/img/'
+    }
+  }
 }
 </script>
 
 <style>
+body{
+  background: #fff;
+}
 a {
     text-decoration: none;
 }
@@ -65,5 +73,29 @@ a {
 }
 .router-link-active .yd-tabbar-txt{
   color: #ff2d2c;
+}
+/*充值页面(payCenter)下拉箭头样式*/
+.yd-accordion-head:after{
+  bottom: -.08rem;
+}
+.yd-accordion-title{
+  height: .7rem;
+  color: #606060;
+  font-size: .22rem;
+  min-height: 0;
+}
+.yd-accordion-head-arrow{
+  height: .7rem;
+  min-height: 0;
+}
+.yd-accordion-head-arrow:after{
+    border: none;
+    width: .18rem;
+    height: .1rem;
+    background: url(../static/img/payCenter_arrow.png) no-repeat;
+    background-size: .18rem .1rem;
+}
+.yd-accordion-head:after{
+  border: .07rem solid #f1f1f2;
 }
 </style>
