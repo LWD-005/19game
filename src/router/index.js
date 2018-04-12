@@ -1,12 +1,13 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Game from '@/components/game'
-import Giftbag from '@/components/giftbag'
-import Personal from '@/components/personal'
-import Changepwd from '@/components/changepwd'
-import CreditsLog from '@/components/personal/creditsLog'
-import PayCenter from '@/components/personal/payCenter'
-import Nav from '@/components/nav'
+import Game from '@/components/game'//游戏首页
+import Giftbag from '@/components/giftbag'//礼包页
+import Personal from '@/components/personal'//个人中心页
+import Changepwd from '@/components/changepwd'//登陆、修改密码、注册页
+import CreditsLog from '@/components/personal/creditsLog'//积分记录页
+import PayCenter from '@/components/personal/payCenter'//充值支付页
+import Share from '@/components/personal/share'//推广游戏分享页
+import Nav from '@/components/nav'//底部导航公共组件
 
 
 Vue.use(Router)
@@ -43,6 +44,11 @@ export default new Router({
       path:'/personal/payCenter',
       name:'payCenter',
       component:PayCenter,
+    }
+    ,{
+      path:'/personal/share',
+      name:'share',
+      component:Share,
     }
   ],
   components:{

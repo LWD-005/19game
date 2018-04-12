@@ -43,9 +43,11 @@
               <span class="wd_rg jfcj_rg"></span>
             </div>
             <div class="wd_list tgyx">
-              <img src="../../static/img/wd_tgyx.png" alt="">
-              <span class="jfcj_tit">推广游戏</span>
-              <span class="wd_rg jfcj_rg"></span>
+              <router-link :to="{path:'/personal/share'}">
+                <img src="../../static/img/wd_tgyx.png" alt="">
+                <span class="jfcj_tit">推广游戏</span>
+                <span class="wd_rg jfcj_rg"></span>
+              </router-link>
             </div>
             <div class="wd_list jfjl">
               <router-link :to="{path:'/personal/creditsLog'}">

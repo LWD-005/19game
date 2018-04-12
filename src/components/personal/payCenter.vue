@@ -41,34 +41,27 @@
       </div>
       <div class="credit">
           <p class="credit_tit">充值金额</p>
-          <div class="credit_list"  @click="show">
-              <div  class="credit_num fiveH">￥500元<i class="credit_pitch"></i></div>
-              <div class="credit_num twoH">￥200元<i class="credit_pitch"></i></div>
-              <div class="credit_num oneH">￥100元<i class="credit_pitch"></i></div>
-              <div class="credit_num fifty">￥50元<i class="credit_pitch"></i></div>
+          <div class="credit_list">
+              <div  :class="{active:item.isActive}" v-for="(item,index) in creditList" :key="index"  @click="activeFun(item)">￥{{item.money}}元<i class="credit_pitch"></i></div>
           </div>
       </div>
        <div class="prePaid">
           <p class="prePaid_tit">充值支付方式</p>
           <div class="prePaid_list">
-              <div class="Unionpay">
-                  <img :src="imgSrc+'Unionpay.png'" alt="">
-                  <span class="prePaidList_tit">银行卡支付</span>
-                  <i class="prePaid_pitch"></i>
+              <div class="pay" :class="item.className" v-for="(item,index) in prePaidList" :key="index"  @click="pitchFun(item)">
+                  <img :src="item.imageSrc" alt="">
+                  <span class="prePaidList_tit">{{item.prePaidList_tit}}</span>
+                  <i :class="{pitch:item.isPitch}"></i>
               </div>
-              <div class="Unionpay">
-                  <img :src="imgSrc+'Unionpay.png'" alt="">
-                  <span class="prePaidList_tit">银行卡支付</span>
-                  <i class="prePaid_pitch"></i>
-              </div>
-              <div class="Unionpay">
-                  <img :src="imgSrc+'Unionpay.png'" alt="">
-                  <span class="prePaidList_tit">银行卡支付</span>
-                  <i class="prePaid_pitch"></i>
-              </div>
+             
           </div>
+
       </div>
+      <router-link :to="{path:'/changepwd'}">
+          <button class="payLogin">登陆</button>
+      </router-link>
   </div>
+  
 </template>
 
 <script>
@@ -76,25 +69,62 @@ export default {
     data(){
         return{
             imgSrc:this.common.imgSrc,
-            
+            creditList:[
+                {
+                    money:"500",
+                    isActive:true
+                },
+                {
+                    money:"200",
+                    isActive:false
+                },
+                {
+                    money:"100",
+                    isActive:false
+                },
+                {
+                    money:"50",
+                    isActive:false
+                },
+            ],
+            prePaidList:[
+                {
+                    className:"Unionpay",
+                    imageSrc:"../../../static/img/Unionpay.png",
+                    prePaidList_tit:"银行卡支付",
+                    isPitch:true
+                },
+                {
+                    className:"WeChat",
+                    imageSrc:"../../../static/img/WeChat.png",
+                    prePaidList_tit:"微信支付",
+                    isPitch:false
+                },
+                {
+                    className:"Alipay",
+                    imageSrc:"../../../static/img/Alipay.png",
+                    prePaidList_tit:"支付宝支付",
+                    isPitch:false
+                },
+            ]
         }
         
     },
     methods:{
-        show:function(){
-                var game_Rtit=document.getElementsByClassName("credit_list");
-                var game_a = document.querySelectorAll(".credit_list div");
-                for(var i = 0;i<game_a.length;i++){
-                    var a = game_a[i];
-                    a.addEventListener("click",function(){
-                        for(var j = 0;j<game_a.length;j++){
-                            game_a[j].className = "";
-                        }
-                        this.className = "active"
-                    }) 
-                }
-            }
-        },
+        activeFun:function(data){
+                this.creditList.forEach(function(obj){
+                    obj.isActive = false;
+                });
+                data.isActive = !data.isActive;
+            },
+        pitchFun:function(data){
+            this.prePaidList.forEach(function( pitchObj){
+                    pitchObj.isPitch = false;
+                });
+                data.isPitch = !data.isPitch;
+        }
+    },
+        
 }
 
 </script>
@@ -154,7 +184,7 @@ export default {
                     line-height: .72rem;
                     font-size: .22rem;
                     border-radius: 4px;
-                    margin-right: .33rem;
+                    margin-right: .3rem;
                     position: relative;
                     .credit_pitch{
                         width: .25rem;
@@ -190,7 +220,7 @@ export default {
             }
             .prePaid_list{
                 margin-top: .2rem;
-                .Unionpay{
+                .pay{
                     height: .75rem;
                     line-height: .75rem;
                     border-bottom: 1px solid #e3e3e3;
@@ -205,16 +235,47 @@ export default {
                         font-size: .22rem;
                         color: #606060;
                     }
-                    .prePaid_pitch{
+                    i{
                         float: right;
                         width: .3rem;
                         height: .3rem;
                         background: url(../../../static/img/wprePaid.png) no-repeat;
                         background-size: .3rem .3rem;
-                        margin-top: .22rem;
+                        margin-top: .2rem;
+                    }
+                    i.pitch{
+                        background: url(../../../static/img/prePaid.png) no-repeat;
+                        background-size: .3rem .3rem;
+                    }
+                }
+                .WeChat{
+                    img{
+                        width: .41rem;
+                        height: .36rem;
+                    }
+                }
+                .Alipay{
+                    img{
+                        width: .39rem;
+                        height: .38rem;
                     }
                 }
             }
+        }
+        .payLogin{
+            text-align: center;
+            border: none;
+            color: #fff;
+            font-size: .24rem;
+            width: 4.57rem;
+            height: .63rem;
+            margin: 0 auto;
+            background: #ff382a;
+            display: block;
+            border-radius: 25px;
+            position: relative;
+            margin-top: 1rem;
+            bottom: .5rem;
         }
     }
 </style>
