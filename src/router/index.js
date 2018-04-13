@@ -7,6 +7,8 @@ import Changepwd from '@/components/changepwd'//登陆、修改密码、注册�
 import CreditsLog from '@/components/personal/creditsLog'//积分记录页
 import PayCenter from '@/components/personal/payCenter'//充值支付页
 import Share from '@/components/personal/share'//推广游戏分享页
+import Lottery from '@/components/personal/lottery'//积分抽奖享页
+import Download from '@/components/download'//下载页、正文页
 import Nav from '@/components/nav'//底部导航公共组件
 
 
@@ -49,6 +51,16 @@ export default new Router({
       path:'/personal/share',
       name:'share',
       component:Share,
+    }
+    ,{
+      path:'/personal/lottery',
+      name:'lottery',
+      component:Lottery,
+    }
+    ,{
+      path:'/download',
+      name:'download',
+      component:Download,
     }
   ],
   components:{

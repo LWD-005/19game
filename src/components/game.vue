@@ -29,10 +29,10 @@
     <div class="sy_wrap">
       <div class="wrap_nav">
         <div class="wrap_icon">
-          <a href="http://">
+          <router-link :to="{path:'/download'}">
             <img src="../../static/img/news.png">
             <p class="wrap_bt">新闻</p>
-          </a>
+          </router-link>
         </div>
         <div class="wrap_icon">
           <a href="http://">
@@ -132,90 +132,7 @@
             <img slot="loadingTip" src="http://static.ydcss.com/uploads/ydui/loading/loading10.svg"/>
 
         </yd-infinitescroll>
-        <!-- <div class="list_hero">
-          <div class="list_img"><img src="../../static/img/hero_icon.png"></div>
-          <div class="hero_wz">
-            <p class="list_tit">青云九天</p>
-            <p class="list_xz"><span class="xz_l">1518.3</span>万次下载</p>
-            <p class="hero_jj">19游正版Q版仙侠回合制手游</p>
-            <p class="hero_zt">
-              <a href="" class="zt_hh">回合</a>
-              <a href="" class="zt_xx">休闲</a>
-              <a href="" class="zt_3d">3D</a>
-              <a href="" class="zt_zbqb">正版Q版</a>
-            </p>
-          </div>
-          <div class="list_btn">
-            <a href="" class="a_btn">下载</a>
-            <p class="list_rl">60.72m</p>
-          </div>
-        </div>
-        <div class="list_hero">
-          <div class="list_img"><img src="../../static/img/hero_icon.png"></div>
-          <div class="hero_wz">
-            <p class="list_tit">青云九天</p>
-            <p class="list_xz"><span class="xz_l">1518.3</span>万次下载</p>
-            <p class="hero_jj">19游正版Q版仙侠回合制手游</p>
-            <p class="hero_zt">
-              <a href="" class="zt_hh">回合</a>
-              <a href="" class="zt_xx">休闲</a>
-              <a href="" class="zt_3d">3D</a>
-              <a href="" class="zt_zbqb">正版Q版</a>
-            </p>
-          </div>
-          <div class="list_btn">
-            <a href="" class="a_btn">下载</a>
-            <p class="list_rl">60.72m</p>
-          </div>
-        </div>
-        <div class="list_hero">
-          <div class="list_img"><img src="../../static/img/hero_icon.png"></div>
-          <div class="hero_wz">
-            <p class="list_tit">青云九天</p>
-            <div class="list_zt">
-              <p class="list_xz"><span class="xz_l">1518.3</span>万次下载</p>
-              <p class="hero_jj">19游正版Q版仙侠回合制手游</p>
-              <p class="hero_zt">
-                <a href="" class="zt_hh">回合</a>
-                <a href="" class="zt_xx">休闲</a>
-                <a href="" class="zt_3d">3D</a>
-                <a href="" class="zt_zbqb">正版Q版</a>
-              </p>
-            </div>
-          </div>
-          <div class="list_btn">
-            <a href="" class="a_btn">下载</a>
-            <p class="list_rl">60.72m</p>
-          </div>
-        </div>
-        <div class="list_hero">
-          <div class="list_img"><img src="../../static/img/hero_icon.png"></div>
-          <div class="hero_wz">
-            <p class="list_tit">青云九天</p>
-            <div class="list_zt">
-              <p class="xz_zt"><span class="zt_sp">已暂停</span><span class="xzjd">35.8%</span></p>
-              <p class="xz_jdt"><yd-progressbar type="line" :progress="progress4" trail-width="1" trail-color="#fe814a"></yd-progressbar></p>
-            </div>
-          </div>
-          <div class="list_btn">
-            <a href="" class="a_btn jx_btn">继续</a>
-            <p class="list_rl">60.72m</p>
-          </div>
-        </div>
-        <div class="list_hero">
-          <div class="list_img"><img src="../../static/img/hero_icon.png"></div>
-          <div class="hero_wz">
-            <p class="list_tit">青云九天</p>
-            <div class="list_zt">
-              <p class="xz_zt"><span class="xzsd">7.3MB<span class="jxzsd">+2.51MB/s</span></span><span class="xzjd">87.9%</span></p>
-              <p class="xz_jdt"><yd-progressbar type="line" :progress="progress3" trail-width="1" trail-color="#fe814a"></yd-progressbar></p>
-            </div>
-          </div>
-          <div class="list_btn">
-            <a href="" class="a_btn hero_zt">暂停</a>
-            <p class="list_rl">60.72m</p>
-          </div>
-        </div> -->
+        
       </div>
     </div>
      <div class="footer_nav">

@@ -98,4 +98,20 @@ a {
 .yd-accordion-head:after{
   border: .07rem solid #f1f1f2;
 }
+/*礼包页 礼包领取按钮样式*/
+.yd-btn-block{
+  margin-top: 0;
+}
+.yd-popup-content{
+  padding-top: .3rem;
+}
+.exhibitors .yd-slider .yd-slider-pagination{
+  display: none;
+}
+.exhibitors .yd-slider-item{
+  width: 65%;
+}
+.exhibitors .yd-slider{
+  margin-top: -.65rem;
+}
 </style>

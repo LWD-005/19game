@@ -11,21 +11,12 @@
       <div class="QR_code">
           <img :src="imgSrc+'share_qr.png'" alt="">
       </div>
+      
   </div>
 </template>
 
 <script>
-var args = {};
-args.url = "";
-args.title = "";
-args.description = "";
-args.imageUrl = "";
-args.appName = "";
-YCQQ.shareToQQ(function(){
-    console.log("share success");
-},function(failReason){
-    console.log(failReason);
-},args);
+
 export default {
   data(){
       return{

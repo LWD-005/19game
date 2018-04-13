@@ -32,7 +32,8 @@
                         <div class="list_btn">
                             <a href="" v-if="item.btn_zt==1" class="a_btn ylq" >已领取</a>
                             <a href="" v-else-if="item.btn_zt==2" class="a_btn yqg" >已抢光</a>
-                            <a href="" v-else class="a_btn" >领取</a>
+                            <yd-button v-else size="large" class="a_btn" type="primary" @click.native="show1 = true">领取</yd-button>
+                            
                         </div>
                      </div>
                 </yd-list>
@@ -44,6 +45,21 @@
                 <img slot="loadingTip" src="http://static.ydcss.com/uploads/ydui/loading/loading10.svg"/>
 
             </yd-infinitescroll>
+            <!-- 点击领取弹窗内容 -->
+            <yd-popup v-model="show1" position="center" width="3.7rem">
+                 <div class="gitfbag_winClose" @click.native="show1 = false"></div>
+                <div class="giftbag_win">
+                    <p class="giftbag_winBtn">
+                        <router-link to="/">
+                            <img class="cont_receive" src="../../static/img/cont_receive.png" alt="">
+                        </router-link>
+                        <router-link to="/">
+                            <img class="look_giftbag" src="../../static/img/look_giftbag.png" alt="">
+                        </router-link>
+                    </p>
+                   
+                </div>
+            </yd-popup>
         </div>
       </div>
        <div class="footer_nav">
@@ -56,6 +72,7 @@
 export default {
   data(){
       return{
+          show1: false,
           progress4:0.15,
           page:1,
           pageSize:10,
@@ -294,6 +311,43 @@ export default {
                 }
             }
         }
+    }
+    // 弹窗背景图样式
+    .giftbag_win{
+        width: 3.7rem;
+        height: 3.4rem;
+        background: url(../../static/img/giftbag_win.png) no-repeat;
+        background-size: 3.7rem 3.4rem;
+        margin: 0 auto;
+        // position: relative;
+        .giftbag_winBtn{
+            position: absolute;
+            left: 0;
+            bottom: .3rem;
+            padding: 0 .27rem 0 .22rem;
+            overflow: hidden;
+            width: 100%;
+            .cont_receive{
+                width: 1.28rem;
+                height: .66rem;
+                float: left;
+            }
+            .look_giftbag{
+                 width: 1.28rem;
+                height: .66rem;
+                float: right;
+            }
+        }
+        
+    }
+    .gitfbag_winClose{
+        width: .27rem;
+        height: .27rem;
+        background: url(../../static/img/gitfbag_winClose.png) no-repeat;
+        background-size: .27rem .27rem;
+        position: absolute;
+        right: 0;
+        top: 0;
     }
 }
 </style>

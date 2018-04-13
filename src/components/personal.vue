@@ -9,7 +9,48 @@
               </div>
               <div class="wd_mc">小白菜姐姐</div>
               <div class="wd_qd">
-                <button class="qd_btn">&radic; 已签到</button>
+                <yd-button v-if="qd==1" size="large" class="qd_btn" type="primary" >已签到</yd-button>
+                <yd-button v-else size="large" class="qd_btn go_qd" type="primary" @click.native="qd_show = true">去签到</yd-button>
+                <!-- 点击去签到弹窗内容 -->
+                <yd-popup v-model="qd_show" position="center" width="5.02rem">
+                    <div class="sigIn_winClose" @click.native="qd_show = false"></div>
+                    <div class="sigIn_win">
+                        <p class="sigIn_tit">签到成功</p>
+                        <p class="sigIn_7day">连续签到7天可获得大礼包</p>
+                        <div class="sigIn_day">
+                          <div class="numDay">
+                            <div class="numDay_bg">1</div>
+                            <p class="oneIntegral">1积分</p>
+                          </div>
+                          <div class="numDay">
+                            <div class="numDay_bg">2</div>
+                            <p class="oneIntegral">1积分</p>
+                          </div>
+                          <div class="numDay">
+                            <div class="numDay_bg">3</div>
+                            <p class="oneIntegral">1积分</p>
+                          </div>
+                          <div class="numDay">
+                            <div class="numDay_bg">4</div>
+                            <p class="oneIntegral">1积分</p>
+                          </div>
+                          <div class="numDay">
+                            <div class="numDay_bg">5</div>
+                            <p class="oneIntegral">1积分</p>
+                          </div>
+                          <div class="numDay">
+                            <div class="numDay_bg">6</div>
+                            <p class="oneIntegral">1积分</p>
+                          </div>
+                          <div class="numDay">
+                            <div class="numDay_bg">7</div>
+                            <p class="oneIntegral">1积分</p>
+                          </div>
+                        </div>
+                         <div class="sigIn_btn">已经连续签到1天</div>
+                    </div>
+                   
+                </yd-popup>
               </div>
             </div>
             <div class="wd_jb">
@@ -38,9 +79,11 @@
           </div>
           <div class="wd_sec">
             <div class="wd_list jfcj">
-              <img src="../../static/img/wd_jfsj.png" alt="">
-              <span class="jfcj_tit">积分抽奖</span>
-              <span class="wd_rg jfcj_rg"></span>
+              <router-link :to="{path:'/personal/lottery'}">
+                <img src="../../static/img/wd_jfsj.png" alt="">
+                <span class="jfcj_tit">积分抽奖</span>
+                <span class="wd_rg jfcj_rg"></span>
+              </router-link>
             </div>
             <div class="wd_list tgyx">
               <router-link :to="{path:'/personal/share'}">
@@ -82,7 +125,8 @@ export default {
   data(){
     return{
       dlzt:1,
-      
+      qd:0,
+      qd_show:false
     }
     
   },
@@ -141,6 +185,9 @@ export default {
             border: none;
             border-radius: .23rem;
             background: #0ed8b9;
+          }
+          .go_qd{
+            background: #ff392a;
           }
         }
       }
@@ -265,6 +312,78 @@ export default {
     }
 
   }
+  // 弹窗背景图样式
+    .sigIn_win{
+        width: 5.02rem;
+        height: 5.31rem;
+        background: url(../../static/img/sigIn_win.png) no-repeat;
+        background-size: 5.02rem 5.31rem;
+        margin: 0 auto;
+        .sigIn_tit{
+          color: #fff;
+          font-size: .36rem;
+          padding-top: .43rem;
+          text-align: center;
+        }
+        .sigIn_7day{
+          color: #777;
+          font-size: .16rem;
+          text-align: center;
+          margin-top: 1.8rem;
+        }
+        .sigIn_day{
+          padding: .2rem .07rem 0 .28rem;
+          overflow: hidden;
+          .numDay{
+            float: left;
+            .numDay_bg{
+              width: .49rem;
+              height: .66rem;
+              background: url(../../static/img/wqd_icon.png) no-repeat;
+              background-size:.49rem .66rem;
+              text-align: center;
+              padding-top: .1rem;
+              color: #121315;
+              font-size: .16rem;
+              margin-right: .17rem;
+            }
+            .oneIntegral{
+              width: .49rem;
+              font-size: .15rem;
+              color: #646464;
+              text-align: center;
+              margin-top: .12rem;
+            }
+          }
+          .numDay:last-child{
+              .numDay_bg{
+                background: url(../../static/img/yqd7_icon.png) no-repeat;
+                background-size:.49rem .66rem;
+              }
+            }
+        }
+        .sigIn_btn{
+          width: 2.36rem;
+          height: .38rem;
+          line-height: .38rem;
+          text-align: center;
+          color: #fff;
+          font-size: .18rem;
+          background: #ff332b;
+          margin:0 auto;
+          border-radius: .13rem;
+          margin-top: .3rem;
+        }
+    }
+    .sigIn_winClose{
+        width: .27rem;
+        height: .27rem;
+        background: url(../../static/img/gitfbag_winClose.png) no-repeat;
+        background-size: .27rem .27rem;
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
 }
 </style>
 
