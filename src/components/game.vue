@@ -245,19 +245,7 @@ export default {
     width: 6.4rem;
     height: 2.8rem;
   }
-  .yd-slider-pagination-item{
-    width: .11rem;
-    height: .11rem;
-    margin-right: .12rem;
-    background-color: #f8d6d3;
-  }
-  .yd-slider-pagination-item-active{
-    background-color: #fff;
-  }
-  .yd-slider-pagination{
-    left: 37%;
-    bottom: .2rem;
-  }
+  
 }
 .sy_wrap{
   padding: .3rem .29rem 0 .29rem;
