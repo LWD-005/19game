@@ -9,8 +9,8 @@
               </div>
               <div class="wd_mc">小白菜姐姐</div>
               <div class="wd_qd">
-                <yd-button v-if="qd==1" size="large" class="qd_btn" type="primary" >已签到</yd-button>
-                <yd-button v-else size="large" class="qd_btn go_qd" type="primary" @click.native="qd_show = true">去签到</yd-button>
+                <a v-if="qd==1" class="qd_btn">已签到</a>
+                <a v-else class="qd_btn go_qd" @click.native="qd_show = true">去签到</a>
                 <!-- 点击去签到弹窗内容 -->
                 <yd-popup v-model="qd_show" position="center" width="5.02rem">
                     <div class="sigIn_winClose" @click.native="qd_show = false"></div>
@@ -73,7 +73,7 @@
               </div>
               <div class="wdl_ts">登陆后关注更多活动</div>
               <div class="wdl_zc">
-                <button class="wdl_btn">登陆/注册</button>
+                <a class="wdl_btn"><span>登陆/注册</span></a>
               </div>
             </div>
           </div>
@@ -110,7 +110,7 @@
                 <span class="wd_rg jfcj_rg"></span>
             </div>
           </div>
-          <a href="" class="jftx_btn">积分提现</a>
+          <a href="" class="jftx_btn"><span>积分提现</span></a>
         </div>
       </div>
       <div class="footer_nav">
@@ -125,7 +125,7 @@ export default {
   data(){
     return{
       dlzt:1,
-      qd:0,
+      qd:1,
       qd_show:false
     }
     
@@ -178,16 +178,19 @@ export default {
           float: right;
           margin: .29rem .3rem 0 0;
           .qd_btn{
+            display: block;
             width: 1.2rem;
-            height: .52rem;
+            height: .82rem;
+            line-height: .7rem;
             font-size: .2rem;
+            text-align: center;
             color: #fff;
-            border: none;
-            border-radius: .23rem;
-            background: #0ed8b9;
+            background: url(../../static/img/yqd_btn.png) no-repeat;
+            background-size:1.2rem .82rem;
           }
           .go_qd{
-            background: #ff392a;
+           background: url(../../static/img/wqd_btn.png) no-repeat;
+           background-size:1.2rem .82rem;
           }
         }
       }
@@ -215,8 +218,8 @@ export default {
           position: relative;
           right: 1.2rem;
           img{
-            width: .33rem;
-            height: .28rem;
+            width: .43rem;
+            height: .42rem;
           }
           .yxcz{
             display: inline-block;
@@ -253,11 +256,40 @@ export default {
           .wdl_btn{
             width: 2.8rem;
             height: .52rem;
-            background: #ff322b;
+            display: inline-block;
             color: #fff;
             font-size: .24rem;
-            border: none;
+            font-family: "黑体";
+            text-align: center;
+            line-height:.52rem;
             border-radius: .2rem;
+            position: relative;
+            z-index: 0;
+              span{
+                  display: inline-block;
+                  width: 2.8rem;
+                  height: .52rem;
+                  line-height: .52rem;
+                  border-radius: .2rem;
+                  position: relative;
+                  z-index: 3;
+                  background: linear-gradient(to right, #ff302b 0%, #ff4429 80%, #ff5526 100%);
+              }
+            }
+          .wdl_btn:before{
+            content: '';
+            display: inline-block;
+            height: .1rem;
+            position: absolute;
+            bottom: -.01rem;
+            left: .1rem;
+            right: .1rem;
+            z-index: -1;
+            border-radius: .1rem;
+            background:  #ff302b;
+            -webkit-filter: blur(5px) brightness(0.95);
+              filter: blur(5px) brightness(0.95);
+            
           }
         }
       }
@@ -297,20 +329,46 @@ export default {
       display: block;
     }
     .jftx_btn{
-      display: block;
-      margin: 0 auto;
-      width: 4.57rem;
+      width:  4.57rem;
       height: .63rem;
-      text-align: center;
-      line-height: .63rem;
-      background: #ff312b;
+      margin: 0 auto;
+      display: block;
       color: #fff;
       font-size: .24rem;
+      font-family: "黑体";
+      text-align: center;
+      line-height: .38rem;
       border-radius: .25rem;
       position: relative;
+      z-index: -1;
       bottom: -.5rem;
-    }
-
+        span{
+            display: inline-block;
+            width: 4.57rem;
+            height: .63rem;
+            line-height: .63rem;
+            border-radius: .25rem;
+            position: relative;
+            z-index: 2;
+            background: linear-gradient(to right, #ff2d2c 0%, #ff4229 50%, #ff5826 100%);
+        }
+      }
+      .jftx_btn:before{
+          content: '';
+          display: inline-block;
+          height: .12rem;
+          position: absolute;
+          bottom: -.01rem;
+          left: .1rem;
+          right: .1rem;
+          z-index: -1;
+          border-radius: .1rem;
+          background:  #ff302b;
+          -webkit-filter: blur(5px) brightness(0.95);
+          filter: blur(5px) brightness(0.95);
+      
+     }
+                
   }
   // 弹窗背景图样式
     .sigIn_win{

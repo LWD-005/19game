@@ -32,8 +32,7 @@
                         <div class="list_btn">
                             <a href="" v-if="item.btn_zt==1" class="a_btn ylq" >已领取</a>
                             <a href="" v-else-if="item.btn_zt==2" class="a_btn yqg" >已抢光</a>
-                            <yd-button v-else size="large" class="a_btn" type="primary" @click.native="show1 = true">领取</yd-button>
-                            
+                            <a href="#" v-else class="get_btn"  @click.native="show1 = true"><span>领取</span></a>
                         </div>
                      </div>
                 </yd-list>
@@ -303,6 +302,46 @@ export default {
                 border-radius: 15px;
                 margin-bottom: .09rem;
                 }
+                .get_btn{
+                    width: .93rem;
+                    height: .38rem;
+                    display: inline-block;
+                    color: #fff;
+                    font-size: .18rem;
+                    font-family: "黑体";
+                    text-align: center;
+                    line-height: .38rem;
+                    border-radius: 15px;
+                    position: relative;
+                    z-index: -1;
+                    margin-bottom: .09rem;
+                    span{
+                        display: inline-block;
+                        width: .93rem;
+                        height: .38rem;
+                        line-height: .38rem;
+                        border-radius: 15px;
+                        position: relative;
+                        z-index: 2;
+                        background: linear-gradient(to right, #ff5526 0%, #ff4429 80%, #ff302b 100%);
+                    }
+                    }
+                    .get_btn:before{
+                        content: '';
+                        display: inline-block;
+                        height: .1rem;
+                        position: absolute;
+                        bottom: -.01rem;
+                        left: .1rem;
+                        right: .1rem;
+                        z-index: -1;
+                        border-radius: .1rem;
+                        background:  #ff302b;
+                        -webkit-filter: blur(5px) brightness(0.95);
+                        filter: blur(5px) brightness(0.95);
+                    
+                }
+                
                 .ylq{
                 background: #ff8665;
                 }

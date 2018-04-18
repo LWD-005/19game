@@ -61,7 +61,8 @@
           <p class="hero_bt">青云九天</p>
           <p class="hreo_rl">348m</p>
           <p class="hreo_start"><span class="dian_star"></span><span class="dian_star"></span><span class="dian_star"></span><span class="dian_star"></span><span class="dian_star"></span><span class="hero_pf">9.1</span></p>
-          <a href="" class="btn btn-danger hero_btn">下载</a>
+          <!-- <a href="" class="btn btn-danger hero_btn">下载</a> -->
+          <a href="#" class="btn btn-danger Down_btn"><span>下载</span></a>
         </div>
         <div class="hero_icon">
           <div class="hero_img">
@@ -70,7 +71,7 @@
           <p class="hero_bt">青云九天</p>
           <p class="hreo_rl">348m</p>
           <p class="hreo_start"><span class="dian_star"></span><span class="dian_star"></span><span class="dian_star"></span><span class="dian_star"></span><span class="dian_star"></span><span class="hero_pf">9.1</span></p>
-          <a href="" class="btn btn-danger hero_btn">下载</a>
+          <a href="" class="btn btn-danger hero_btn"><i></i>15%</a>
         </div>
         <div class="hero_icon">
           <div class="hero_img">
@@ -92,7 +93,7 @@
                     <p class="list_tit">{{item.title}}</p>
                       <div class="list_zt">
                       <p class="xz_zt"><span class="xzsd">{{item.xzsd}}MB<span class="jxzsd">+{{item.jxzsd}}MB/s</span></span><span class="xzjd">{{item.xzjd}}</span></p>
-                      <p class="xz_jdt"><yd-progressbar type="line" :progress="item.progress" trail-width="1" trail-color="#fe814a"></yd-progressbar></p>
+                      <p class="xz_jdt xz_jsjd"><yd-progressbar type="line" :progress="item.progress" stroke-width="1" trail-width="1" trail-color="#fe814a"></yd-progressbar></p>
                     </div>
                 </div>
                 <div class="hero_wz" v-else-if="item.btn_zt==2">
@@ -119,8 +120,9 @@
                 <div class="list_btn">
                     <a href="" v-if="item.btn_zt==1" class="a_btn hero_zt" >暂停</a>
                     <a href="" v-else-if="item.btn_zt==2" class="a_btn jx_btn" >继续</a>
-                    <a href="" v-else class="a_btn" >下载</a>
-                      <p class="list_rl">{{item.rl}}m</p>
+                    <!-- <a href="" v-else class="a_btn" >下载</a> -->
+                    <a href="#" v-else class="Down_btn"><span>下载</span></a>
+                    <p class="list_rl">{{item.rl}}m</p>
                 </div>
               </div>
             </yd-list>
@@ -269,6 +271,7 @@ export default {
   }
   // hero样式
   .sy_hero{
+    margin: 0 auto;
     margin-top: .7rem;
     display:table;
     .hero_icon{
@@ -313,11 +316,10 @@ export default {
         color: #b7b6b6;
       }
     }
-    .hero_btn{
+    .Down_btn{
       width: .93rem;
       height: .38rem;
       display: inline-block;
-      background: #ff362b;
       color: #fff;
       font-size: .18rem;
       font-family: "黑体";
@@ -325,6 +327,57 @@ export default {
       line-height: .38rem;
       border-radius: 15px;
       margin-top: .18rem;
+      position: relative;
+      z-index: -1;
+      span{
+        display: inline-block;
+        width: .93rem;
+       height: .38rem;
+       line-height: .38rem;
+        border-radius: 15px;
+        position: relative;
+        z-index: 2;
+        background: linear-gradient(to right, #ff5526 0%, #ff4429 80%, #ff302b 100%);
+      }
+    }
+    .Down_btn:before{
+         content: '';
+        display: inline-block;
+        height: .1rem;
+        position: absolute;
+        bottom: -.01rem;
+        left: .1rem;
+        right: .1rem;
+        z-index: -1;
+        border-radius: .1rem;
+       background:  #ff302b;
+        -webkit-filter: blur(5px) brightness(0.95);
+        filter: blur(5px) brightness(0.95);
+    }
+    .hero_btn{
+      width: .93rem;
+      height: .38rem;
+      display: inline-block;
+      background: #ff8f92;
+      color: #fff;
+      font-size: .18rem;
+      font-family: "黑体";
+      text-align: center;
+      line-height: .38rem;
+      border-radius: 15px;
+      margin-top: .18rem;
+      position: relative;
+      overflow: hidden;
+      i{
+        position: absolute;
+        top: 0;
+        left: 0;
+         width: .18rem;
+        height: .36rem;
+        display: inline-block;
+        background: #ff5426;
+        border-radius: 0 10px 10px 0;
+      }
     }
     .hero_jx{
       background: #cacaca;
@@ -354,7 +407,7 @@ export default {
         float: left;
         margin-top: .24rem;
         margin-left: .12rem;
-        width: 60%;
+        width: 65%;
         .list_tit{
           font-size: .2rem;
           font-family: "黑体";
@@ -408,8 +461,7 @@ export default {
         }
         .xz_zt{
           overflow: hidden;
-          height: .26rem;
-          line-height: .26rem;
+          margin-top: .08rem;
           .zt_sp{
             float: left;
             font-size: .13rem;
@@ -433,6 +485,10 @@ export default {
           line-height: .16rem;
           height: .16rem;
         }
+        .xz_jsjd{
+           line-height: .2rem;
+          height: .2rem;
+        }
       }
       .list_btn{
         text-align: center;
@@ -450,6 +506,44 @@ export default {
           line-height: .38rem;
           border-radius: 15px;
           margin-bottom: .09rem;
+        }
+        .Down_btn{
+          width: .93rem;
+          height: .38rem;
+          display: inline-block;
+          color: #fff;
+          font-size: .18rem;
+          font-family: "黑体";
+          text-align: center;
+          line-height: .38rem;
+          border-radius: 15px;
+          position: relative;
+          z-index: -1;
+           margin-bottom: .09rem;
+          span{
+            display: inline-block;
+            width: .93rem;
+          height: .38rem;
+          line-height: .38rem;
+            border-radius: 15px;
+            position: relative;
+            z-index: 2;
+            background: linear-gradient(to right, #ff5526 0%, #ff4429 80%, #ff302b 100%);
+          }
+        }
+        .Down_btn:before{
+            content: '';
+            display: inline-block;
+            height: .1rem;
+            position: absolute;
+            bottom: -.01rem;
+            left: .1rem;
+            right: .1rem;
+            z-index: -1;
+            border-radius: .1rem;
+          background:  #ff302b;
+            -webkit-filter: blur(5px) brightness(0.95);
+            filter: blur(5px) brightness(0.95);
         }
         .jx_btn{
           background: #cacaca;
