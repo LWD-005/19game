@@ -50,7 +50,7 @@
                                 <div class="mask"></div>
                             </div>
                             <div class="getLuck" @click="startLottery">
-                                <div class="wrapper">
+                                <div class="wrapper begin">
                                 <img :src="imgSrc+'lottery_begin.png'" alt="">
                                 </div>
                             </div>
@@ -331,7 +331,9 @@ export default {
               height: 1.57rem;
               margin: 0;
             }
-
+            .begin{
+                height: 1.8rem;
+            }
             img {
               width: 100%;
               height: 100%;
@@ -343,7 +345,7 @@ export default {
               top: 0;
               left: 0;
               width: 1.57rem;
-              height: 1.57rem;
+              height: 1.72rem;
               background: url(../../../static/img/lottery_hover.png) no-repeat;
               background-size: 100% 100%;
               display: none;
@@ -370,15 +372,15 @@ export default {
     padding: .28rem .23rem 0 .24rem;
     .lottery_rule{
         float: left;
-        width: 1.03rem;
-        height: .38rem;
+        width: 1.23rem;
+        height: .74rem;
         background: url(../../../static/img/lottery_ruleBtn.png) no-repeat;
         background-size: 100% 100%;
     }
     .lottery_rec{
         float: right;
-        width: 1.03rem;
-        height: .38rem;
+        width: 1.23rem;
+        height: .74rem;
         background: url(../../../static/img/lottery_recBtn.png) no-repeat;
         background-size: 100% 100%;
     }

@@ -3,29 +3,7 @@
      <div class="logo">
          <img src="../../static/img/logo.png">
      </div>
-     <!-- 修改密码页 -->
-     <div class="login" v-if="loginId == 'changepwd'">
-        <div class="login_phone">
-             <div class="phone_icon">
-                 <img src="../../static/img/phone_icon.png" alt="">
-             </div>
-             <input type="text" placeholder="请输入注册手机号码" class="login_ipt phone_ipt">
-        </div>
-        <div class="login_phone login_verification">
-             <div class="phone_icon verification_icon">
-                 <img src="../../static/img/verification.png" alt="">
-             </div>
-             <input type="text" placeholder="请输入您的验证码" class="login_ipt phone_ipt">
-             <a href="" class="verification_btn">发送验证码</a>
-        </div>
-         <div class="login_phone login_pwd">
-             <div class="phone_icon">
-                 <img src="../../static/img/newpwd.png" alt="">
-             </div>
-             <input type="text" placeholder="请输入您的新密码" class="login_ipt phone_ipt">
-        </div>
-        <a href="" class=" review_btn">确认修改</a>
-     </div>
+
     <!-- 注册页 -->
     <div class="login" v-if="loginId == 'register'">
         <div class="login_phone">
@@ -39,7 +17,7 @@
                  <img src="../../static/img/verification.png" alt="">
              </div>
              <input type="text" placeholder="请输入您的验证码" class="login_ipt phone_ipt">
-             <a href="" class="verification_btn">发送验证码</a>
+             <a href="" class="verification_btn"><span>发送验证码</span></a>
         </div>
          <div class="login_phone login_pwd">
              <div class="phone_icon">
@@ -47,11 +25,11 @@
              </div>
              <input type="text" placeholder="请输入6-16位密码" class="login_ipt phone_ipt">
         </div>
-        <a href="" class="review_btn register_btn">注册</a>
+        <a href="" class="review_btn register_btn"><span>注册</span></a>
          <p class="agree">注册即代表同意<a class="agree_a" href="">《19游戏用户注册协议》</a></p>
      </div>
      <!-- 登陆页 -->
-    <div class="login login_page" v-else>
+    <div class="login login_page"  v-if="loginId == 'login'">
        <div class="login_phone">
              <div class="phone_icon">
                  <img src="../../static/img/user_icon.png" alt="">
@@ -64,9 +42,32 @@
              </div>
              <input type="text" placeholder="请输入密码" class="login_ipt loginPage_ipt">
         </div>
-        <a href="" class="review_btn register_btn">登陆</a>
+        <a href="" class="review_btn register_btn"><span>登陆</span></a>
         <p class="login_p"><a @click="register" class="qRegister">快速注册</a><a class="lostPwd">忘记密码？</a></p>
     </div>
+     <!-- 修改密码页 -->
+     <div class="login"   v-if="loginId == 'changepwd'">
+        <div class="login_phone">
+             <div class="phone_icon">
+                 <img src="../../static/img/phone_icon.png" alt="">
+             </div>
+             <input type="text" placeholder="请输入注册手机号码" class="login_ipt phone_ipt">
+        </div>
+        <div class="login_phone login_verification">
+             <div class="phone_icon verification_icon">
+                 <img src="../../static/img/verification.png" alt="">
+             </div>
+             <input type="text" placeholder="请输入您的验证码" class="login_ipt phone_ipt">
+             <a href="" class="verification_btn"><span>发送验证码</span></a>
+        </div>
+         <div class="login_phone login_pwd">
+             <div class="phone_icon">
+                 <img src="../../static/img/newpwd.png" alt="">
+             </div>
+             <input type="text" placeholder="请输入您的新密码" class="login_ipt phone_ipt">
+        </div>
+        <a href="" class="review_btn"><span>确认修改</span></a>
+     </div>
   </div>
   
 </template>
@@ -153,18 +154,44 @@ export default {
                     }
                 }
                 .verification_btn{
+                    width: 1.44rem;
+                    height: .52rem;
+                    display: block;
                     position: relative;
                     top: -.17rem;
                     float: right;
-                    width: 1.44rem;
-                    height: .52rem;
-                    line-height: .52rem;
-                    display: block;
                     color: #fff;
-                    background: #ff3d2a;
-                    text-align: center;
                     font-size: .2rem;
+                    text-align: center;
+                    line-height: .52rem;
                     border-radius: .2rem;
+                    z-index: 0;
+                    background: linear-gradient(to right, #ff5526 0%, #ff4429 50%, #ff302b 100%);
+                    span{
+                        display: inline-block;
+                        width: 1.44rem;
+                        height: .52rem;
+                        line-height: .52rem;
+                        border-radius: 15px;
+                        position: relative;
+                        z-index: 2;
+                        background: linear-gradient(to right, #ff5526 0%, #ff4429 50%, #ff302b 100%);
+                    }
+                    }
+                    .verification_btn:before{
+                        content: '';
+                        display: inline-block;
+                        height: .1rem;
+                        position: absolute;
+                        bottom: 0rem;
+                        left: .1rem;
+                        right: .1rem;
+                        z-index: -1;
+                        border-radius: .1rem;
+                        background:  #ff2c2c;
+                        -webkit-filter: blur(5px) brightness(0.95);
+                        filter: blur(5px) brightness(0.95);
+                    
                 }
             }
             .login_pwd{
@@ -178,18 +205,47 @@ export default {
                     }
                 }
             }
+           
             .review_btn{
-                display: block;
-                margin: 0 auto;
                 width: 4.57rem;
                 height: .63rem;
-                line-height: .63rem;
-                text-align: center;
-                color: #FFF;
-                background: #ff362b;
+                display: block;
+                margin: 0 auto;
+                color: #fff;
                 font-size: .24rem;
-                border-radius: .25rem;
+                text-align: center;
+                text-align: center;
+                line-height: .63rem;
+                border-radius: 15px;
+                position: relative;
+                z-index: 0;
                 margin-top: .48rem;
+                background: linear-gradient(to right, #ff302b 0%, #ff4429 50%, #ff5526 100%);
+                span{
+                    display: inline-block;
+                    width: 4.57rem;
+                    height: .63rem;
+                    line-height: .63rem;
+                    border-radius: 15px;
+                    position: relative;
+                    z-index: 2;
+                    background: linear-gradient(to right, #ff302b 0%, #ff4429 50%, #ff5526 100%);
+                }
+                }
+                .review_btn:before{
+                    content: '';
+                    display: inline-block;
+                    height: .2rem;
+                    position: absolute;
+                    bottom: 0;
+                    left: .2rem;
+                    right: .2rem;
+                    z-index: -1;
+                    border-radius: .1rem;
+                    background:  #ff2c2c;
+                    -webkit-filter: blur(5px) brightness(0.95);
+                    filter: blur(5px) brightness(0.95);
+                
             }
         }
         // 登陆页面样式

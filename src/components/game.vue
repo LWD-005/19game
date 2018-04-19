@@ -93,15 +93,14 @@
                     <p class="list_tit">{{item.title}}</p>
                       <div class="list_zt">
                       <p class="xz_zt"><span class="xzsd">{{item.xzsd}}MB<span class="jxzsd">+{{item.jxzsd}}MB/s</span></span><span class="xzjd">{{item.xzjd}}</span></p>
-                      <p class="xz_jdt xz_jsjd"><yd-progressbar type="line" :progress="item.progress" stroke-width="1" trail-width="1" trail-color="#fe814a"></yd-progressbar></p>
+                      <p class="xz_jdt xz_jsjd"><span class="undown"><i :style="{width:item.xzjd}" class="down_i"></i></span></p>
                     </div>
                 </div>
                 <div class="hero_wz" v-else-if="item.btn_zt==2">
                     <p class="list_tit">{{item.title}}</p>
                     <div class="list_zt">
                       <p class="xz_zt"><span class="zt_sp">已暂停</span><span class="xzjd">{{item.xzjd}}</span></p>
-                      <p class="xz_jdt"><yd-progressbar type="line" :progress="item.progress" trail-width="1" trail-color="#fe814a"></yd-progressbar></p>
-                      
+                      <p class="xz_jdt"><span class="undown"><i :style="{width:item.xzjd}" class="down_i"></i></span></p>
                     </div>
                 </div>
                 <div class="hero_wz" v-else>
@@ -149,6 +148,7 @@ export default {
   data () {
     return {
       page:1,
+      widthI:3.9,
       pageSize:10,
       list:[
         {
@@ -484,6 +484,24 @@ export default {
         .xz_jdt{
           line-height: .16rem;
           height: .16rem;
+          .undown{
+            display: inline-block;
+            width: 3.9rem;
+            height: .04rem;
+            background: #eeeeee;
+            border-radius: 1px;
+            position: relative;
+            z-index: 0;
+            .down_i{
+              position: absolute;
+              top: 0;
+              left: 0;
+              display: inline-block;
+              // width: 3.3rem;
+              height: .04rem;
+              background: linear-gradient(to right, #fe735e 0%, #fe7c51 80%, #fe824a 100%);
+            }
+          }
         }
         .xz_jsjd{
            line-height: .2rem;

@@ -10,10 +10,10 @@
               <div class="wd_mc">小白菜姐姐</div>
               <div class="wd_qd">
                 <a v-if="qd==1" class="qd_btn">已签到</a>
-                <a v-else class="qd_btn go_qd" @click.native="qd_show = true">去签到</a>
+                <yd-button v-else class="qd_btn go_qd" @click.native="qd_show = true">去签到</yd-button>
                 <!-- 点击去签到弹窗内容 -->
                 <yd-popup v-model="qd_show" position="center" width="5.02rem">
-                    <div class="sigIn_winClose" @click.native="qd_show = false"></div>
+                    <div class="sigIn_winClose" @click="qd_show = false"></div>
                     <div class="sigIn_win">
                         <p class="sigIn_tit">签到成功</p>
                         <p class="sigIn_7day">连续签到7天可获得大礼包</p>
@@ -47,7 +47,7 @@
                             <p class="oneIntegral">1积分</p>
                           </div>
                         </div>
-                         <div class="sigIn_btn">已经连续签到1天</div>
+                         <a class="sigIn_btn"><span>已经连续签到1天</span></a>
                     </div>
                    
                 </yd-popup>
@@ -73,7 +73,7 @@
               </div>
               <div class="wdl_ts">登陆后关注更多活动</div>
               <div class="wdl_zc">
-                <a class="wdl_btn"><span>登陆/注册</span></a>
+                <a class="wdl_btn" @click="login"><span>登陆/注册</span></a>
               </div>
             </div>
           </div>
@@ -124,15 +124,18 @@
 export default {
   data(){
     return{
-      dlzt:1,
-      qd:1,
+      dlzt:0,
+      qd:0,
       qd_show:false
     }
     
   },
   methods:{
     changepwd(){
-        this.$router.push({path:'/changepwd',query:{id:'changepwd1'}});
+        this.$router.push({path:'/changepwd',query:{id:'changepwd'}});
+    },
+    login(){
+        this.$router.push({path:'/changepwd',query:{id:'login'}});
     }
   }
 }
@@ -191,6 +194,9 @@ export default {
           .go_qd{
            background: url(../../static/img/wqd_btn.png) no-repeat;
            background-size:1.2rem .82rem;
+            background-position: 0 .04rem;
+            margin-top: -.04rem;
+            padding: 0;
           }
         }
       }
@@ -420,18 +426,45 @@ export default {
               }
             }
         }
-        .sigIn_btn{
+      .sigIn_btn{
           width: 2.36rem;
           height: .38rem;
-          line-height: .38rem;
-          text-align: center;
+          display: block;
           color: #fff;
           font-size: .18rem;
-          background: #ff332b;
-          margin:0 auto;
+          font-family: "黑体";
+          text-align: center;
+          line-height: .38rem;
           border-radius: .13rem;
-          margin-top: .3rem;
+          position: relative;
+          z-index:0;
+           margin:0 auto;
+           margin-top: .3rem;
+          span{
+              display: inline-block;
+              width: 2.36rem;
+              height: .38rem;
+              line-height: .38rem;
+              border-radius: .13rem;
+              position: relative;
+              z-index: 2;
+              background: linear-gradient(to right, #ff5526 0%, #ff4429 80%, #ff302b 100%);
+          }
         }
+      .sigIn_btn:before{
+          content: '';
+          display: inline-block;
+          height: .1rem;
+          position: absolute;
+          bottom: -.01rem;
+          left: .1rem;
+          right: .1rem;
+          z-index: -1;
+          border-radius: .1rem;
+      background:  #ff302b;
+          -webkit-filter: blur(5px) brightness(0.95);
+          filter: blur(5px) brightness(0.95);
+      }
     }
     .sigIn_winClose{
         width: .27rem;

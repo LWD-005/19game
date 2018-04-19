@@ -21,7 +21,7 @@
                 </div>
               </div>
               <div class="list_btn">
-                    <a href="" class="a_btn" >下载</a>
+                    <a href="" class="a_btn" ><span>下载</span></a>
                 </div>
           </div>
       </div>
@@ -140,17 +140,42 @@
                 margin-top: .39rem;
                 float: right;
                 .a_btn{
-                width: .93rem;
-                height: .38rem;
-                display: inline-block;
-                background: #ff3f29;
-                color: #fff;
-                font-size: .18rem;
-                font-family: "黑体";
-                text-align: center;
-                line-height: .38rem;
-                border-radius: 15px;
-                margin-bottom: .09rem;
+                    width: .93rem;
+                    height: .38rem;
+                    display: inline-block;
+                    color: #fff;
+                    font-size: .18rem;
+                    font-family: "黑体";
+                    text-align: center;
+                    line-height: .38rem;
+                    border-radius: 15px;
+                    position: relative;
+                    z-index: -1;
+                    margin-bottom: .09rem;
+                    span{
+                        display: inline-block;
+                        width: .93rem;
+                        height: .38rem;
+                        line-height: .38rem;
+                        border-radius: 15px;
+                        position: relative;
+                        z-index: 2;
+                        background: linear-gradient(to right, #ff5526 0%, #ff4429 80%, #ff302b 100%);
+                    }
+                 }
+                .a_btn:before{
+                    content: '';
+                    display: inline-block;
+                    height: .1rem;
+                    position: absolute;
+                    bottom: -.01rem;
+                    left: .1rem;
+                    right: .1rem;
+                    z-index: -1;
+                    border-radius: .1rem;
+                background:  #ff302b;
+                    -webkit-filter: blur(5px) brightness(0.95);
+                    filter: blur(5px) brightness(0.95);
                 }
             }
             

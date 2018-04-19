@@ -26,13 +26,13 @@
                             <p class="list_tit"><span class="sp_tit">{{item.title}}</span><span class="fb_lb">{{item.dblb}}</span></p>
                             <div class="list_zt">
                                 <p class="hero_jj">{{item.jianjie}}</p>
-                                <p class="lbsy"><span class="lb_sy">剩余</span><yd-progressbar type="line" :progress="item.progress3" trail-width="1" trail-color="#fe814a"></yd-progressbar><span class="sy_bfb">{{item.sy_bfb}}%</span></p>
+                                <p class="lbsy"><span class="lb_sy">剩余</span><span class="undown"><i :style="{width:item.sy_bfb}" class="down_i"></i></span><span class="sy_bfb">{{item.sy_bfb}}</span></p>
                             </div>
                         </div>
                         <div class="list_btn">
                             <a href="" v-if="item.btn_zt==1" class="a_btn ylq" >已领取</a>
                             <a href="" v-else-if="item.btn_zt==2" class="a_btn yqg" >已抢光</a>
-                            <a href="#" v-else class="get_btn"  @click.native="show1 = true"><span>领取</span></a>
+                            <yd-button v-else class="get_btn"  @click.native="show1=true"><span>领取</span></yd-button>
                         </div>
                      </div>
                 </yd-list>
@@ -46,7 +46,7 @@
             </yd-infinitescroll>
             <!-- 点击领取弹窗内容 -->
             <yd-popup v-model="show1" position="center" width="3.7rem">
-                 <div class="gitfbag_winClose" @click.native="show1 = false"></div>
+                 <div class="gitfbag_winClose" @click="show1 = false"></div>
                 <div class="giftbag_win">
                     <p class="giftbag_winBtn">
                         <router-link to="/">
@@ -72,7 +72,6 @@ export default {
   data(){
       return{
           show1: false,
-          progress4:0.15,
           page:1,
           pageSize:10,
           list:[
@@ -81,7 +80,7 @@ export default {
                   title:"青云九天",
                   fblb:"19游独家精英礼包",
                   jianjie:"装备强化水晶X30、三级宝石X20、坐骑进化X5",
-                  sy_bfb:"85",
+                  sy_bfb:"85%",
                   progress3:0.15,
                   btn_zt:1
             },
@@ -90,7 +89,7 @@ export default {
                   title:"青云九天",
                   fblb:"19游独家精英礼包",
                   jianjie:"装备强化水晶X30、三级宝石X20、坐骑进化X5",
-                  sy_bfb:"0",
+                  sy_bfb:"0%",
                   progress3:1,
                   btn_zt:2
             },
@@ -99,8 +98,7 @@ export default {
                   title:"青云九天",
                   fblb:"19游独家精英礼包",
                   jianjie:"装备强化水晶X30、三级宝石X20、坐骑进化X5",
-                  sy_bfb:"85",
-                  progress3:0.15,
+                  sy_bfb:"85%",
                   btn_zt:0
             },
             {
@@ -108,8 +106,7 @@ export default {
                   title:"青云九天",
                   fblb:"19游独家精英礼包",
                   jianjie:"装备强化水晶X30、三级宝石X20、坐骑进化X5",
-                  sy_bfb:"85",
-                  progress3:0.15,
+                  sy_bfb:"15%",
                   btn_zt:0
             },
             {
@@ -117,8 +114,7 @@ export default {
                   title:"青云九天",
                   fblb:"19游独家精英礼包",
                   jianjie:"装备强化水晶X30、三级宝石X20、坐骑进化X5",
-                  sy_bfb:"85",
-                  progress3:0.15,
+                  sy_bfb:"55%",
                   btn_zt:1
             },
             {
@@ -126,8 +122,7 @@ export default {
                   title:"青云九天",
                   fblb:"19游独家精英礼包",
                   jianjie:"装备强化水晶X30、三级宝石X20、坐骑进化X5",
-                  sy_bfb:"0",
-                  progress3:1,
+                  sy_bfb:"0%",
                   btn_zt:2
             },
             {
@@ -135,8 +130,7 @@ export default {
                   title:"青云九天",
                   fblb:"19游独家精英礼包",
                   jianjie:"装备强化水晶X30、三级宝石X20、坐骑进化X5",
-                  sy_bfb:"85",
-                  progress3:0.15,
+                  sy_bfb:"85%",
                   btn_zt:0
             }
           ]
@@ -264,9 +258,28 @@ export default {
                 white-space: nowrap;
                 }
                 .lbsy{
-                    width: 3.8rem;
+                    width: 3.87rem;
                     height: .28rem;
                     line-height: .28rem;
+                    .undown{
+                        display: inline-block;
+                        width: 3rem;
+                        height: .04rem;
+                        background: #eeeeee;
+                        border-radius: 1px;
+                        position: relative;
+                        top: -.06rem;
+                        z-index: 0;
+                        .down_i{
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            display: inline-block;
+                            // width: 3.3rem;
+                            height: .04rem;
+                            background: linear-gradient(to right, #fe735e 0%, #fe7c51 80%, #fe824a 100%);
+                        }
+                    }
                     .lb_sy{
                         font-size: .16rem;
                         color: #444;
@@ -313,8 +326,10 @@ export default {
                     line-height: .38rem;
                     border-radius: 15px;
                     position: relative;
-                    z-index: -1;
+                    z-index: 0;
                     margin-bottom: .09rem;
+                    padding: 0;
+                     background: linear-gradient(to right, #ff5526 0%, #ff4429 80%, #ff302b 100%);
                     span{
                         display: inline-block;
                         width: .93rem;
