@@ -124,7 +124,7 @@
 export default {
   data(){
     return{
-      dlzt:0,
+      dlzt:1,
       qd:0,
       qd_show:false
     }

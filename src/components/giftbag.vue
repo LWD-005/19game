@@ -268,7 +268,7 @@ export default {
                         background: #eeeeee;
                         border-radius: 1px;
                         position: relative;
-                        top: -.06rem;
+                        top: -.04rem;
                         z-index: 0;
                         .down_i{
                             position: absolute;

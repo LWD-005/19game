@@ -2,7 +2,7 @@
   <div class="index">
     <!-- 首页轮播图 -->
     <div class="banner">
-      <yd-slider autoplay="3000">
+      <yd-slider autoplay="5000">
         <yd-slider-item>
             <a href="http://www.ydcss.com">
                 <img src="../../static/img/game_banner.png">
