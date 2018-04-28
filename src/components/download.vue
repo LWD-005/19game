@@ -6,22 +6,19 @@
           </div>
           <div class="down_game">
               <div class="down_gameImg">
-                  <img src="../../static/img/download_icon.png" alt="">
+                  <img :src="Detail.icon" alt="">
               </div>
               <div class="down_gameTit">
-                 <p class="list_tit">保卫萝卜3</p>
-                <p class="list_xz"><span class="xz_rl">98MB</span><span class="xz_l">1254万次下载</span></p>
+                 <p class="list_tit">{{Detail.name}}</p>
+                <p class="list_xz"><span class="xz_rl">{{Detail.size}}MB</span><span class="xz_l">{{Detail.download}}万次下载</span></p>
                 <div class="list_zt">
                     <p class="hero_zt"> 
-                        <a href="" class="zt_hh">回合</a>
-                        <a href="" class="zt_xx">休闲</a>
-                        <a href="" class="zt_3d">3D</a>
-                        <a href="" class="zt_zbqb">画面精美</a>
+                        <a href="" class="zt_hh" v-for="(item,index) in Detail.category" :key="index">{{item}}</a>
                     </p>
                 </div>
               </div>
               <div class="list_btn">
-                    <a href="" class="a_btn" ><span>下载</span></a>
+                    <a :href="Detail.download_path" class="a_btn" ><span>下载</span></a>
                 </div>
           </div>
       </div>
@@ -32,20 +29,49 @@
           </div>
           <div class="gameContent">
               <p class="gameContent_p">
-                  《保卫萝卜-CarrotFantasy》是一款可爱风格塔防小游戏，容易上手、老少皆宜，内置新手引导。游戏含有丰富的关卡和主题包，拥有各自风格特色的多种防御塔，有趣的音效设定和搞怪的怪物造型及名字大大地增加了游戏的趣味性。玩家还可以收集道具和怪物，完成更多的成就。
+                  {{Detail.description}}
               </p>
-              <div class="gameContent_img">
+              <div class="gameContent_img" v-for="(item,index) in Detail.images" :key="index">
                   <div class="gameContent_imgfl">
-                      <img src="../../static/img/download_1.png" alt="">
+                      <img :src="item" alt="">
                   </div>
-                  <div class="gameContent_imgfr">
-                      <img src="../../static/img/download_2.png" alt="">
-                  </div>
+
               </div>
           </div>
       </div>
   </div>
 </template>
+
+<script>
+import Axios from 'axios'
+
+export default {
+    data(){
+        return{
+            Detail:''
+        }
+    },
+  created:function(){
+      let urlId = this.$route.query.id;
+      let apiUrl=this.common.apiUrl;
+        Axios({
+            method:'post',
+            url:apiUrl+'Game/GameDetail',
+            params:{
+                id:urlId
+            }
+        })
+        .then((res)=>{
+            this.Detail=res.data.d;
+        })
+        .catch((error)=>{
+            console.log(error);
+            alert("网络错误，不能访问");
+        })
+  }
+}
+</script>
+
 
 <style lang="less" scoped>
 .download{
@@ -72,6 +98,7 @@
                     width: 100%;
                     height: 100%;
                     position: absolute;
+                    border-radius: .27rem;
                     top: -.37rem;
                 }
             }
@@ -107,25 +134,21 @@
                         font-size: .12rem;
                         font-family: "黑体";
                         color: #fff;
-                        height: .17rem;
-                        line-height: .17rem;
-                        // padding-top: .01rem;
-                        width: .34rem;
+                       padding: .01rem .04rem;
                         text-align: center;
                         margin-right: .12rem;
-                        border-radius: 2px;
+                        border-radius: .02rem;
                     }
-                    .zt_hh{
+                    a:first-child{
                         background: #ff7750;
                     }
-                    .zt_xx{
+                    a:nth-child(2){
                         background: #be73ff;
                     }
-                    .zt_3d{
+                    a:nth-child(3){
                         background: #23c8af;
                     }
-                    .zt_zbqb{
-                        width: .70rem;
+                    a:nth-child(4){
                         background: #fa9700;
                     }
                 }
@@ -214,19 +237,15 @@
                     float: left;
                     width: 47%;
                     height: 4.8rem;
+                    margin-right: 0.3rem;
+                    margin-bottom: .3rem;
                     img{
                         width: 100%;
                         height: 100%;
                     }
                 }
-                .gameContent_imgfr{
-                    float: right;
-                    width: 47%;
-                    height: 4.8rem;
-                    img{
-                        width: 100%;
-                        height: 100%;
-                    }
+                .gameContent_imgfl:nth-child(even){
+                   margin-right: 0;
                 }
             }
         }

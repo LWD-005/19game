@@ -201,7 +201,7 @@ export default {
                     margin-right: 0;
                 }
                 div.active{
-                    color: #ffff;
+                    color: #fff;
                     background: #d4ae75;
                     .credit_pitch{
                         display: inline-block;

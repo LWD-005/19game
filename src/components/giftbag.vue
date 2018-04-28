@@ -18,43 +18,45 @@
             </div>
         </div>
         <div class="section">
-            <yd-infinitescroll :callback="loadList" ref="infinitescrollDemo">
-                <yd-list theme="1" slot="list">
-                     <div class="list_hero" v-for="(item, index) in list" :key="index">
-                        <div class="list_img"><img :src="item.img"></div>
-                        <div class="hero_wz">
-                            <p class="list_tit"><span class="sp_tit">{{item.title}}</span><span class="fb_lb">{{item.dblb}}</span></p>
-                            <div class="list_zt">
-                                <p class="hero_jj">{{item.jianjie}}</p>
-                                <p class="lbsy"><span class="lb_sy">剩余</span><span class="undown"><i :style="{width:item.sy_bfb}" class="down_i"></i></span><span class="sy_bfb">{{item.sy_bfb}}</span></p>
+            <yd-pullrefresh :callback="freshList">
+                <yd-infinitescroll :callback="loadMore" ref="infinitescrollDemo">
+                    <yd-list theme="1" slot="list">
+                        <div class="list_hero" v-for="(item, index) in list" :key="index">
+                            <div class="list_img"><img :src="item.icon"></div>
+                            <div class="hero_wz">
+                                <p class="list_tit"><span class="sp_tit">{{item.gamename}}</span><span class="fb_lb">{{item.gift_name}}</span></p>
+                                <div class="list_zt">
+                                    <p class="hero_jj">{{item.content}}</p>
+                                    <p class="lbsy"><span class="lb_sy">剩余</span><span class="undown"><i :style="{width:((1-giftPre)*100+'%')}" class="down_i"></i></span><span class="sy_bfb">{{giftPre*100}}%</span></p>
+                                </div>
+                            </div>
+                            <div class="list_btn">
+                                <yd-button v-if="item.status==1" class="get_btn"  @click.native="show1=true"><span>领取</span></yd-button>
+                                <a href="" v-else-if="item.status==2" class="a_btn yqg" >已领取</a>
+                                <a href="" v-else  class="a_btn ylq" >已抢光</a>
                             </div>
                         </div>
-                        <div class="list_btn">
-                            <a href="" v-if="item.btn_zt==1" class="a_btn ylq" >已领取</a>
-                            <a href="" v-else-if="item.btn_zt==2" class="a_btn yqg" >已抢光</a>
-                            <yd-button v-else class="get_btn"  @click.native="show1=true"><span>领取</span></yd-button>
-                        </div>
-                     </div>
-                </yd-list>
+                    </yd-list>
 
-                <!-- 数据全部加载完毕显示 -->
-                <span slot="doneTip">啦啦啦，啦啦啦，没有数据啦~~</span>
+                    <!-- 数据全部加载完毕显示 -->
+                    <span slot="doneTip">啦啦啦，啦啦啦，没有数据啦~~</span>
 
-                <!-- 加载中提示，不指定，将显示默认加载中图标 -->
-                <img slot="loadingTip" src="http://static.ydcss.com/uploads/ydui/loading/loading10.svg"/>
+                    <!-- 加载中提示，不指定，将显示默认加载中图标 -->
+                    <img slot="loadingTip" src="http://static.ydcss.com/uploads/ydui/loading/loading10.svg"/>
 
-            </yd-infinitescroll>
+                </yd-infinitescroll>
+             </yd-pullrefresh>   
             <!-- 点击领取弹窗内容 -->
             <yd-popup v-model="show1" position="center" width="3.7rem">
                  <div class="gitfbag_winClose" @click="show1 = false"></div>
                 <div class="giftbag_win">
                     <p class="giftbag_winBtn">
-                        <router-link to="/">
+                        <a @click="show1 = false">
                             <img class="cont_receive" src="../../static/img/cont_receive.png" alt="">
-                        </router-link>
-                        <router-link to="/">
+                        </a>
+                        <a>
                             <img class="look_giftbag" src="../../static/img/look_giftbag.png" alt="">
-                        </router-link>
+                        </a>
                     </p>
                    
                 </div>
@@ -68,79 +70,115 @@
 </template>
 
 <script>
+
+import Axios from 'axios'
+
 export default {
-  data(){
-      return{
-          show1: false,
-          page:1,
-          pageSize:10,
-          list:[
-              {
-                  img:"../../static/img/hero_icon.png",
-                  title:"青云九天",
-                  fblb:"19游独家精英礼包",
-                  jianjie:"装备强化水晶X30、三级宝石X20、坐骑进化X5",
-                  sy_bfb:"85%",
-                  progress3:0.15,
-                  btn_zt:1
+    data(){
+        return{
+            show1: false,
+            page:1,
+            count:8,
+            list:[],//礼包列表
+            gitlist:[],
+            giftPre:'',//礼包剩余百分比
+            giftStatus:[],//领取状态码
+        }
+        
+    },
+    
+    created:function(){
+        let apiUrl=this.common.apiUrl;
+            Axios({
+                method:'post',
+                url:apiUrl+'Game/GiftList',
+                params:{
+                    page:this.page,
+                    count:this.count
+                }
+            })
+            .then((res)=>{
+                this.list=res.data.d.list;
+                this.list.forEach((item,index) => {
+                if (item.remain==0) {
+                    this.giftPre=0;
+                }else{
+                    this.giftPre = item.remain/item.count;
+                }
+                });
+            })
+            .catch((error)=>{
+                console.log(error);
+                alert("网络错误，不能访问");
+            })
+    },
+    methods: {
+            freshList() {
+            let _thisList;
+            _thisList = this.list;
+            this.page= 1;
+            this.get_data1();
             },
-            {
-                  img:"../../static/img/hero_icon.png",
-                  title:"青云九天",
-                  fblb:"19游独家精英礼包",
-                  jianjie:"装备强化水晶X30、三级宝石X20、坐骑进化X5",
-                  sy_bfb:"0%",
-                  progress3:1,
-                  btn_zt:2
+            loadMore() {
+            this.page++;
+            this.get_data1();
             },
-            {
-                  img:"../../static/img/hero_icon.png",
-                  title:"青云九天",
-                  fblb:"19游独家精英礼包",
-                  jianjie:"装备强化水晶X30、三级宝石X20、坐骑进化X5",
-                  sy_bfb:"85%",
-                  btn_zt:0
-            },
-            {
-                  img:"../../static/img/hero_icon.png",
-                  title:"青云九天",
-                  fblb:"19游独家精英礼包",
-                  jianjie:"装备强化水晶X30、三级宝石X20、坐骑进化X5",
-                  sy_bfb:"15%",
-                  btn_zt:0
-            },
-            {
-                  img:"../../static/img/hero_icon.png",
-                  title:"青云九天",
-                  fblb:"19游独家精英礼包",
-                  jianjie:"装备强化水晶X30、三级宝石X20、坐骑进化X5",
-                  sy_bfb:"55%",
-                  btn_zt:1
-            },
-            {
-                  img:"../../static/img/hero_icon.png",
-                  title:"青云九天",
-                  fblb:"19游独家精英礼包",
-                  jianjie:"装备强化水晶X30、三级宝石X20、坐骑进化X5",
-                  sy_bfb:"0%",
-                  btn_zt:2
-            },
-            {
-                  img:"../../static/img/hero_icon.png",
-                  title:"青云九天",
-                  fblb:"19游独家精英礼包",
-                  jianjie:"装备强化水晶X30、三级宝石X20、坐骑进化X5",
-                  sy_bfb:"85%",
-                  btn_zt:0
+            get_data1() {
+            let json = {
+                page: this.page,
+                count: this.count,
+            };
+            let _this = this;
+            let apiUrl=this.common.apiUrl;
+            Axios({
+                method:'post',
+                url:apiUrl+'Game/GiftList',
+                params:json
+            }).then((res)=>{
+                if (res.data != null) {
+                    if (_this.page== 1) {
+                    _this.$refs.pullrefresh.$emit("ydui.pullrefresh.finishLoad");
+                    } else {
+                    
+                        // return        //正常来说把这个return删掉就可以了 现在删掉不行
+                        
+                    _thisList.push(_this.list);
+                    
+                    }
+                    if (res.data.resultList.length != 10) {
+                    _this.$refs.infinitescroll.$emit("ydui.infinitescroll.loadedDone");
+                    return;
+                    } else {
+                    
+                    _this.$refs.infinitescroll.$emit("ydui.infinitescroll.finishLoad");
+                    }
+                    _this.$refs.infinitescroll.$emit("ydui.infinitescroll.reInit");
+                }
+            })
+            // Axios.post(json,apiUrl+'Game/GiftList', function(res) {
+            //     if (res.data != null) {
+            //         if (_this.page== 1) {
+            //         _this.$refs.pullrefresh.$emit("ydui.pullrefresh.finishLoad");
+            //         } else {
+                    
+            //             return        //正常来说把这个return删掉就可以了 现在删掉不行
+                        
+            //         //_this.data_list.push.apply(_this.data_list, res.data.resultList);
+            //         }
+            //         if (res.data.resultList.length != 10) {
+            //         _this.$refs.infinitescroll.$emit("ydui.infinitescroll.loadedDone");
+            //         return;
+            //         } else {
+                    
+            //         _this.$refs.infinitescroll.$emit("ydui.infinitescroll.finishLoad");
+            //         }
+            //         _this.$refs.infinitescroll.$emit("ydui.infinitescroll.reInit");
+            //     }
+               
+            // });
             }
-          ]
       }
-  },
-  methods: {
-      loadList(){
-          
-      }
-  }
+    
 }
 </script>
 

@@ -11,6 +11,8 @@ import {TabBar, TabBarItem} from 'vue-ydui/dist/lib.rem/tabbar'
 import {InfiniteScroll} from 'vue-ydui/dist/lib.rem/infinitescroll'
 import {Radio, RadioGroup} from 'vue-ydui/dist/lib.rem/radio';
 import Common_ from './components/common'
+import axios  from 'axios'
+
 
 Vue.prototype.common = Common_
 

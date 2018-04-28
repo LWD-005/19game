@@ -3,26 +3,12 @@
     <!-- 首页轮播图 -->
     <div class="banner">
       <yd-slider autoplay="5000">
-        <yd-slider-item>
-            <a href="http://www.ydcss.com">
-                <img src="../../static/img/game_banner.png">
+        <yd-slider-item  v-for="(item, index) in CarouselList" :key="index">
+            <a :href="item.url">
+                <img :src="item.img">
             </a>
         </yd-slider-item>
-        <yd-slider-item>
-            <a href="http://www.ydcss.com">
-                <img src="../../static/img/game_banner.png">
-            </a>
-        </yd-slider-item>
-        <yd-slider-item>
-            <a href="http://www.ydcss.com">
-                <img src="../../static/img/game_banner.png">
-            </a>
-        </yd-slider-item>
-        <yd-slider-item>
-            <a href="http://www.ydcss.com">
-                <img src="../../static/img/game_banner.png">
-            </a>
-        </yd-slider-item>
+
       </yd-slider>
     </div>
     <!-- 首页内容 -->
@@ -54,74 +40,59 @@
         </div>
       </div>
       <div class="sy_hero">
-        <div class="hero_icon">
+        <div class="hero_icon" v-for="(item,index) in hotList.slice(0,3)" :key="index">
           <div class="hero_img">
-            <img src="../../static/img/hero_icon.png">
+            <img :src="item.icon">
           </div>
-          <p class="hero_bt">青云九天</p>
-          <p class="hreo_rl">348m</p>
-          <p class="hreo_start"><span class="dian_star"></span><span class="dian_star"></span><span class="dian_star"></span><span class="dian_star"></span><span class="dian_star"></span><span class="hero_pf">9.1</span></p>
+          <p class="hero_bt">{{item.name}}</p>
+          <p class="hreo_rl">{{item.size}}m</p>
+          <p class="hreo_start"><span class="dian_star"></span><span class="dian_star"></span><span class="dian_star"></span><span class="dian_star"></span><span class="dian_star"></span><span class="hero_pf">{{item.score}}</span></p>
           <!-- <a href="" class="btn btn-danger hero_btn">下载</a> -->
-          <a href="#" class="btn btn-danger Down_btn"><span>下载</span></a>
+          <a :href="item.download_path" v-if="down_zt==0" class="btn btn-danger Down_btn"><span>下载</span></a>
+          <a :href="item.download_path" v-else-if="down_zt==1" class="btn btn-danger hero_btn"><i></i>15%</a>
+          <a :href="item.download_path" v-else class="btn btn-danger hero_btn  hero_jx">继续</a>
         </div>
-        <div class="hero_icon">
-          <div class="hero_img">
-            <img src="../../static/img/hero_icon.png">
-          </div>
-          <p class="hero_bt">青云九天</p>
-          <p class="hreo_rl">348m</p>
-          <p class="hreo_start"><span class="dian_star"></span><span class="dian_star"></span><span class="dian_star"></span><span class="dian_star"></span><span class="dian_star"></span><span class="hero_pf">9.1</span></p>
-          <a href="" class="btn btn-danger hero_btn"><i></i>15%</a>
-        </div>
-        <div class="hero_icon">
-          <div class="hero_img">
-            <img src="../../static/img/hero_icon.png">
-          </div>
-          <p class="hero_bt">青云九天</p>
-          <p class="hreo_rl">348m</p>
-          <p class="hreo_start"><span class="dian_star"></span><span class="dian_star"></span><span class="dian_star"></span><span class="dian_star"></span><span class="dian_star"></span><span class="hero_pf">9.1</span></p>
-          <a href="" class="btn btn-danger hero_btn  hero_jx">继续</a>
-        </div>
+
       </div>
+
       <!-- 首页列表 -->
       <div class="sy_list">
          <yd-infinitescroll :callback="loadList" ref="infinitescrollDemo">
             <yd-list theme="2" slot="list">
               <div class="list_hero" v-for="(item, index) in list" :key="index">
-                <div class="list_img"><img :src="item.img"></div>
+                <div class="list_img"><img :src="item.icon"></div>
                 <div class="hero_wz" v-if="item.btn_zt==1">
-                    <p class="list_tit">{{item.title}}</p>
+                    <p class="list_tit">{{item.name}}</p>
                       <div class="list_zt">
                       <p class="xz_zt"><span class="xzsd">{{item.xzsd}}MB<span class="jxzsd">+{{item.jxzsd}}MB/s</span></span><span class="xzjd">{{item.xzjd}}</span></p>
                       <p class="xz_jdt xz_jsjd"><span class="undown"><i :style="{width:item.xzjd}" class="down_i"></i></span></p>
                     </div>
                 </div>
                 <div class="hero_wz" v-else-if="item.btn_zt==2">
-                    <p class="list_tit">{{item.title}}</p>
+                    <p class="list_tit">{{item.name}}</p>
                     <div class="list_zt">
                       <p class="xz_zt"><span class="zt_sp">已暂停</span><span class="xzjd">{{item.xzjd}}</span></p>
                       <p class="xz_jdt"><span class="undown"><i :style="{width:item.xzjd}" class="down_i"></i></span></p>
                     </div>
                 </div>
                 <div class="hero_wz" v-else>
-                    <p class="list_tit">{{item.title}}</p>
-                    <p class="list_xz"><span class="xz_l">{{item.xzl}}</span>万次下载</p>
-                    <div class="list_zt">
-                        <p class="hero_jj">{{item.jianjie}}</p>
-                        <p class="hero_zt"> 
-                          <a href="" class="zt_hh">回合</a>
-                          <a href="" class="zt_xx">休闲</a>
-                          <a href="" class="zt_3d">3D</a>
-                          <a href="" class="zt_zbqb">正版Q版</a>
-                        </p>
-                    </div>
+                    <router-link :to="{path:'/download',query:{id:item.id}}">
+                      <p class="list_tit">{{item.name}}</p>
+                      <p class="list_xz"><span class="xz_l">{{item.download}}</span>万次下载</p>
+                      <div class="list_zt">
+                          <p class="hero_jj">{{item.description}}</p>
+                          <p class="hero_zt"> 
+                            <a v-for="(part,index) in item.category" :key="index"  href="" class="zt_hh">{{part}}</a>
+                          </p>
+                      </div>
+                    </router-link>
                 </div>
                 <div class="list_btn">
                     <a href="" v-if="item.btn_zt==1" class="a_btn hero_zt" >暂停</a>
                     <a href="" v-else-if="item.btn_zt==2" class="a_btn jx_btn" >继续</a>
                     <!-- <a href="" v-else class="a_btn" >下载</a> -->
-                    <a href="#" v-else class="Down_btn"><span>下载</span></a>
-                    <p class="list_rl">{{item.rl}}m</p>
+                    <a :href="item.download_path" v-else class="Down_btn"><span>下载</span></a>
+                    <p class="list_rl">{{item.size}}m</p>
                 </div>
               </div>
             </yd-list>
@@ -143,95 +114,63 @@
 </template>
 
 <script>
+import game from '../assets/game'
+import Axios from 'axios'
+
+
+
 export default {
+   
   name: 'game',
   data () {
     return {
       page:1,
+      down_zt:0,
       widthI:3.9,
       pageSize:10,
-      list:[
-        {
-          img:"../../static/img/hero_icon.png",
-          title:"青云九天",
-          jianjie:"19游正版Q版仙侠回合制手游",
-          xzl:"1518.3",
-          xzsd:"7.3",
-          jxzsd:"2.51",
-          jxzds:"2.51",
-          xzjd:"85%",
-          rl:"60.72",
-          progress:.85,
-          btn_zt:1
-        },
-        {
-          img:"../../static/img/hero_icon.png",
-          title:"青云九天",
-          jianjie:"19游正版Q版仙侠回合制手游",
-          xzl:"1518.3",
-          xzsd:"7.3",
-          jxzds:"2.51",
-          xzjd:"50%",
-          rl:"60.72",
-          progress:.50,
-          btn_zt:2
-        },
-        {
-          img:"../../static/img/hero_icon.png",
-          title:"青云九天",
-          jianjie:"19游正版Q版仙侠回合制手游",
-          xzl:"1518.3",
-          xzsd:"7.3",
-          jxzds:"2.51",
-          xzjd:"85%",
-          rl:"60.72",
-          progress:.50,
-        },
-        {
-          img:"../../static/img/hero_icon.png",
-          title:"青云九天",
-          jianjie:"19游正版Q版仙侠回合制手游",
-          xzl:"1518.3",
-          xzsd:"7.3",
-          jxzsd:"2.51",
-          jxzds:"2.51",
-          xzjd:"85%",
-          rl:"60.72",
-          progress:.85,
-          btn_zt:1
-        },
-        {
-          img:"../../static/img/hero_icon.png",
-          title:"青云九天",
-          jianjie:"19游正版Q版仙侠回合制手游",
-          xzl:"1518.3",
-          xzsd:"7.3",
-          jxzds:"2.51",
-          xzjd:"50%",
-          rl:"60.72",
-          progress:.50,
-          btn_zt:2
-        },
-        {
-          img:"../../static/img/hero_icon.png",
-          title:"青云九天",
-          jianjie:"19游正版Q版仙侠回合制手游",
-          xzl:"1518.3",
-          xzsd:"7.3",
-          jxzds:"2.51",
-          xzjd:"85%",
-          rl:"60.72",
-          progress:.50,
-        }
-      ]
+      CarouselList:[],
+      list:[],
+      hotList:[]
     }
   },
   methods:{
     loadList(){
     
     }
-  }
+  },
+  created(){
+    let apiUrl=this.common.apiUrl;
+    Axios.get(apiUrl+'Base/CarouselList')
+    .then((res)=>{
+    this.CarouselList=res.data.d.list;
+    })
+    .catch(error=>{
+      console.log(error);
+      alert("网络错误，不能访问");
+    });
+    Axios({
+      method:'post',
+      url:apiUrl+'Game/GameList',
+      params:{
+        is_hot:"1"
+      },
+    }).then((res)=>{
+      this.hotList=res.data.d.list;
+    });
+    Axios.post(apiUrl+'Game/GameList')
+    .then((res)=>{
+    this.list=res.data.d.list;
+    })
+    .catch(error=>{
+      console.log(error);
+      alert("网络错误，不能访问");
+    });
+  },
+ 
+    
+  
 }
+
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -328,7 +267,7 @@ export default {
       border-radius: 15px;
       margin-top: .18rem;
       position: relative;
-      z-index: -1;
+      z-index: 0;
       span{
         display: inline-block;
         width: .93rem;
@@ -399,6 +338,7 @@ export default {
         height: .76rem;
         margin-top: .22rem;
         img{
+          border-radius: .1rem;
           width: 100%;
           height: 100%;
         }
@@ -428,34 +368,32 @@ export default {
           font-family: "黑体";
           line-height: .17rem;
           height: .17rem;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
         }
         .hero_zt{
-          height: .14rem;
-          line-height: .14rem;
+          margin-top: -.1rem;
           a{
             display: inline-block;
             font-size: .1rem;
             font-family: "黑体";
             color: #fff;
-            height: .13rem;
-            line-height: .13rem;
-            padding-top: .01rem;
-            width: .28rem;
+            padding:.002rem .03rem .002rem .03rem;
             text-align: center;
             margin-right: .12rem;
             border-radius: 1px;
           }
-          .zt_hh{
+          a:first-child{
             background: #ff7750;
           }
-          .zt_xx{
+          a:nth-child(2){
             background: #be73ff;
           }
-          .zt_3d{
+          a:nth-child(3){
             background: #23c8af;
           }
-          .zt_zbqb{
-            width: .58rem;
+          a:nth-child(4){
             background: #fa9700;
           }
         }
@@ -536,7 +474,7 @@ export default {
           line-height: .38rem;
           border-radius: 15px;
           position: relative;
-          z-index: -1;
+          z-index: 0;
            margin-bottom: .09rem;
           span{
             display: inline-block;
