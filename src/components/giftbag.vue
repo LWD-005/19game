@@ -18,7 +18,7 @@
             </div>
         </div>
         <div class="section">
-            <yd-pullrefresh :callback="freshList">
+            <yd-pullrefresh :callback="freshList" ref="pullrefresh">
                 <yd-infinitescroll :callback="loadMore" ref="infinitescrollDemo">
                     <yd-list theme="1" slot="list">
                         <div class="list_hero" v-for="(item, index) in list" :key="index">
@@ -78,7 +78,7 @@ export default {
         return{
             show1: false,
             page:1,
-            count:8,
+            count:10,
             list:[],//礼包列表
             gitlist:[],
             giftPre:'',//礼包剩余百分比
@@ -114,8 +114,7 @@ export default {
     },
     methods: {
             freshList() {
-            let _thisList;
-            _thisList = this.list;
+
             this.page= 1;
             this.get_data1();
             },
@@ -128,7 +127,7 @@ export default {
                 page: this.page,
                 count: this.count,
             };
-            let _this = this;
+
             let apiUrl=this.common.apiUrl;
             Axios({
                 method:'post',
@@ -136,46 +135,25 @@ export default {
                 params:json
             }).then((res)=>{
                 if (res.data != null) {
-                    if (_this.page== 1) {
-                    _this.$refs.pullrefresh.$emit("ydui.pullrefresh.finishLoad");
+                    if (this.page== 1) {
+                        this.list=res.data.d.list;
+                        this.$refs.pullrefresh.$emit("ydui.pullrefresh.finishLoad");
                     } else {
-                    
-                        // return        //正常来说把这个return删掉就可以了 现在删掉不行
-                        
-                    _thisList.push(_this.list);
-                    
+                        this.gitlist = res.data.d.list;
+                        this.gitlist.forEach((item,index) => {
+                            this.list.push(item);
+                        })
                     }
-                    if (res.data.resultList.length != 10) {
-                    _this.$refs.infinitescroll.$emit("ydui.infinitescroll.loadedDone");
+                    if (res.data.d.list.length != 10) {
+                    this.$refs.infinitescrollDemo.$emit("ydui.infinitescroll.loadedDone");
                     return;
                     } else {
-                    
-                    _this.$refs.infinitescroll.$emit("ydui.infinitescroll.finishLoad");
+                    this.$refs.infinitescrollDemo.$emit("ydui.infinitescroll.finishLoad");
                     }
-                    _this.$refs.infinitescroll.$emit("ydui.infinitescroll.reInit");
+                    this.$refs.infinitescrollDemo.$emit("ydui.infinitescroll.reInit");
                 }
             })
-            // Axios.post(json,apiUrl+'Game/GiftList', function(res) {
-            //     if (res.data != null) {
-            //         if (_this.page== 1) {
-            //         _this.$refs.pullrefresh.$emit("ydui.pullrefresh.finishLoad");
-            //         } else {
-                    
-            //             return        //正常来说把这个return删掉就可以了 现在删掉不行
-                        
-            //         //_this.data_list.push.apply(_this.data_list, res.data.resultList);
-            //         }
-            //         if (res.data.resultList.length != 10) {
-            //         _this.$refs.infinitescroll.$emit("ydui.infinitescroll.loadedDone");
-            //         return;
-            //         } else {
-                    
-            //         _this.$refs.infinitescroll.$emit("ydui.infinitescroll.finishLoad");
-            //         }
-            //         _this.$refs.infinitescroll.$emit("ydui.infinitescroll.reInit");
-            //     }
-               
-            // });
+            //
             }
       }
     

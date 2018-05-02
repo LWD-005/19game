@@ -124,7 +124,7 @@
 export default {
   data(){
     return{
-      dlzt:1,
+      dlzt:2,
       qd:0,
       qd_show:false
     }
@@ -136,7 +136,10 @@ export default {
     },
     login(){
         this.$router.push({path:'/changepwd',query:{id:'login'}});
-    }
+    },
+    
+        
+
   }
 }
 </script>

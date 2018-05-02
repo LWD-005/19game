@@ -10,22 +10,22 @@
              <div class="phone_icon">
                  <img src="../../static/img/phone_icon.png" alt="">
              </div>
-             <input type="text" placeholder="请输入您的手机号码" class="login_ipt phone_ipt">
+             <input type="number" placeholder="请输入您的手机号码" v-model='phone' class="login_ipt phone_ipt">
         </div>
-        <div class="login_phone login_verification">
+        <div class="login_phone login_verification" :class="{show:isShow}">
              <div class="phone_icon verification_icon">
                  <img src="../../static/img/verification.png" alt="">
              </div>
              <input type="text" placeholder="请输入您的验证码" class="login_ipt phone_ipt">
-             <a href="" class="verification_btn"><span>发送验证码</span></a>
+             <button @click="sendcode" type="button" :disabled="disabled" class="verification_btn"><span>{{btntxt}}</span></button >
         </div>
          <div class="login_phone login_pwd">
              <div class="phone_icon">
                  <img src="../../static/img/newpwd.png" alt="">
              </div>
-             <input type="text" placeholder="请输入6-16位密码" class="login_ipt phone_ipt">
+             <input type="password" placeholder="请输入6-16位密码" class="login_ipt phone_ipt" v-model="pwd">
         </div>
-        <a href="" class="review_btn register_btn"><span>注册</span></a>
+        <a @click="query" class="review_btn register_btn"><span>注册</span></a>
          <p class="agree">注册即代表同意<a class="agree_a" href="">《19游戏用户注册协议》</a></p>
      </div>
      <!-- 登陆页 -->
@@ -34,15 +34,15 @@
              <div class="phone_icon">
                  <img src="../../static/img/user_icon.png" alt="">
              </div>
-             <input type="text" placeholder="请输入你的账号" class="login_ipt phone_ipt">
+             <input v-model="loginPhone" type="number" placeholder="请输入你的账号" class="login_ipt phone_ipt">
         </div>
          <div class="login_phone login_pwd">
              <div class="phone_icon">
                  <img src="../../static/img/newpwd.png" alt="">
              </div>
-             <input type="text" placeholder="请输入密码" class="login_ipt loginPage_ipt">
+             <input type="password" placeholder="请输入密码" class="login_ipt loginPage_ipt" v-model="loginPwd">
         </div>
-        <a href="" class="review_btn register_btn"><span>登陆</span></a>
+        <a @click="Login" class="review_btn register_btn"><span>登陆</span></a>
         <p class="login_p"><a @click="register" class="qRegister">快速注册</a><a class="lostPwd">忘记密码？</a></p>
     </div>
      <!-- 修改密码页 -->
@@ -53,12 +53,12 @@
              </div>
              <input type="text" placeholder="请输入注册手机号码" class="login_ipt phone_ipt">
         </div>
-        <div class="login_phone login_verification">
+        <div class="login_phone login_verification" >
              <div class="phone_icon verification_icon">
                  <img src="../../static/img/verification.png" alt="">
              </div>
              <input type="text" placeholder="请输入您的验证码" class="login_ipt phone_ipt">
-             <a href="" class="verification_btn"><span>发送验证码</span></a>
+             <a class="verification_btn"><span>{{btntxt}}</span></a>
         </div>
          <div class="login_phone login_pwd">
              <div class="phone_icon">
@@ -73,17 +73,143 @@
 </template>
 
 <script>
+import Axios from 'axios'
 export default {
     data(){
          return{
-             loginId:this.$route.query.id
+            loginId:this.$route.query.id,
+            disabled:false,
+            time:0,
+            btntxt:"发送验证码",
+            phone:'',
+            pwd:"",
+            type:'',
+            isShow:false,
+            loginPhone:'',
+            loginPwd:''
          }
     },
   methods:{
      register(){
          this.$router.replace({path:'/changepwd',query:{id:'register'}});
         window.location.reload()
-     }
+     },
+     //验证手机号码部分
+    sendcode(){
+        var reg=11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/;
+        if(this.phone==''){
+            alert("请输入手机号码！");
+            if(reg.test(this.phone)){
+                this.isShow=false;
+                let apiUrl=this.common.apiUrl;
+                Axios({
+                    method:'post', 
+                    url:apiUrl+'Base/Sendsms',
+                    params:{
+                        phone:this.phone,
+                    },
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
+                    },
+                })
+                .then((res)=>{
+                    if(res.status==200){
+                        if(res.data.d==undefined){
+                            alert(res.data.msg);
+                        }else{
+                            alert(res.data.d.m);
+                        }
+                    }
+                })
+                .catch((error)=>{
+                    console.log(error);
+                    alert("网络错误，不能访问！");
+                })
+                this.time=120;
+                this.disabled=true;
+                this.timer();
+            }else{
+                this.isShow=false
+            }
+        }
+    },
+    timer() {
+        if (this.time > 0) {
+              this.time--;
+              this.btntxt=this.time+"s后重新获取";
+              setTimeout(this.timer, 1000);
+        } else{
+              this.time=0;
+              this.btntxt="获取验证码";
+              this.disabled=false;
+        }
+    },
+    query(){
+        if(this.phone=='' ){
+            alert("请输入你的手机号码！");
+        }else if(this.pwd == ''){
+            alert("请输入6-16位密码！");
+        }else if(this.pwd.length>15 || this.pwd.length<5){
+            alert("密码格式不对！");
+        }else{
+            console.log(this.pwd);
+            let apiUrl=this.common.apiUrl;
+           Axios({
+                method:'post',
+                url:apiUrl+'Cis/Register',
+                params:{
+                    phone:this.phone,
+                    password:this.pwd,
+                    code:1234,
+                    type:1
+                },
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
+                },
+            })
+            .then((res)=>{
+                if(res.status==200){
+                    alert("注册成功！");
+                    this.$router.push({path:'/changepwd',query:{id:'login'}});
+                    window.location.reload()
+                }
+            })
+            .catch((error)=>{
+                console.log(error);
+                alert("网络错误，不能访问！");
+            })
+        }
+    },
+    Login(){
+        if(this.loginPhone==""){
+            alert("请输入您的账号！")
+        }else if(this.loginPwd==''){
+            alert("密码不能为空！")
+        }else{
+            let apiUrl=this.common.apiUrl;
+            Axios({
+                method:'post',      
+                url:apiUrl+'Cis/Login',
+                params:{
+                    phone:this.loginPhone,
+                    password:this.loginPwd
+                },
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
+                },
+            })
+            .then((res)=>{
+                if(res.status==200){
+                    this.$router.push({path:'/'});
+                }
+            })
+            .catch((error)=>{
+                console.log(error);
+                alert("网络错误，不能访问！");
+            })
+        }
+        
+    }
   },
   
 }
@@ -141,6 +267,9 @@ export default {
                     color: #949494;
                 }
             }
+            .show{
+                display: none;
+            }
             .login_verification{
                 padding-left: .35rem;
                 .verification_icon{
@@ -164,6 +293,7 @@ export default {
                     font-size: .2rem;
                     text-align: center;
                     line-height: .52rem;
+                    border: none;
                     border-radius: .2rem;
                     z-index: 0;
                     background: linear-gradient(to right, #ff5526 0%, #ff4429 50%, #ff302b 100%);
