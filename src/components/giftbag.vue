@@ -11,7 +11,7 @@
                 </div>
                 <form action="">
                     <div class="search_k">
-                        <input type="text" placeholder="搜索更多福利">
+                        <input type="text" placeholder="搜索更多福利" v-model.trim="keywork">
                         <a href="" class="sea_icon"></a>
                     </div>
                 </form>
@@ -27,7 +27,7 @@
                                 <p class="list_tit"><span class="sp_tit">{{item.gamename}}</span><span class="fb_lb">{{item.gift_name}}</span></p>
                                 <div class="list_zt">
                                     <p class="hero_jj">{{item.content}}</p>
-                                    <p class="lbsy"><span class="lb_sy">剩余</span><span class="undown"><i :style="{width:((1-giftPre)*100+'%')}" class="down_i"></i></span><span class="sy_bfb">{{giftPre*100}}%</span></p>
+                                    <p class="lbsy"><span class="lb_sy">剩余</span><span class="undown"><i :style="{width:(1-item.remain/item.count)*100+'%'}" class="down_i"></i></span><span class="sy_bfb">{{(item.remain/item.count)*100}}%</span></p>
                                 </div>
                             </div>
                             <div class="list_btn">
@@ -73,6 +73,14 @@
 
 import Axios from 'axios'
 
+const delay = (function() {
+  let timer = 0;
+  return function(callback, ms) {
+    clearTimeout(timer);
+    timer = setTimeout(callback, ms);
+  };
+})();
+
 export default {
     data(){
         return{
@@ -81,12 +89,21 @@ export default {
             count:10,
             list:[],//礼包列表
             gitlist:[],
-            giftPre:'',//礼包剩余百分比
+            giftPre:[],//礼包剩余百分比
             giftStatus:[],//领取状态码
+            keywork: '',
+            search:[]
         }
         
     },
-    
+    watch: {
+    //watch title change
+        title() {
+        delay(() => {
+            this.fetchData();
+        }, 300);
+        },
+    },
     created:function(){
         let apiUrl=this.common.apiUrl;
             Axios({
@@ -99,13 +116,7 @@ export default {
             })
             .then((res)=>{
                 this.list=res.data.d.list;
-                this.list.forEach((item,index) => {
-                if (item.remain==0) {
-                    this.giftPre=0;
-                }else{
-                    this.giftPre = item.remain/item.count;
-                }
-                });
+                
             })
             .catch((error)=>{
                 console.log(error);
@@ -113,16 +124,16 @@ export default {
             })
     },
     methods: {
-            freshList() {
+        freshList() {
 
             this.page= 1;
             this.get_data1();
-            },
-            loadMore() {
+        },
+        loadMore() {
             this.page++;
             this.get_data1();
-            },
-            get_data1() {
+        },
+        get_data1() {
             let json = {
                 page: this.page,
                 count: this.count,
@@ -142,6 +153,7 @@ export default {
                         this.gitlist = res.data.d.list;
                         this.gitlist.forEach((item,index) => {
                             this.list.push(item);
+                            
                         })
                     }
                     if (res.data.d.list.length != 10) {
@@ -153,8 +165,25 @@ export default {
                     this.$refs.infinitescrollDemo.$emit("ydui.infinitescroll.reInit");
                 }
             })
-            //
-            }
+        //
+        },
+        fetchData(){
+            let apiUrl=this.common.apiUrl;
+            Axios({
+                method:'post',
+                url:apiUrl+'Game/GiftList',
+                params:{
+                    keywork:this.keywork
+                }
+            })
+            .then((res)=>{
+                console.log();
+            })
+            .catch((error)=>{
+                 console.log(error);
+                alert("网络错误，不能访问");
+            })
+        }
       }
     
 }

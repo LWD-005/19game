@@ -12,7 +12,8 @@ import {InfiniteScroll} from 'vue-ydui/dist/lib.rem/infinitescroll'
 import {Radio, RadioGroup} from 'vue-ydui/dist/lib.rem/radio';
 import Common_ from './components/common'
 import axios  from 'axios'
-
+import Vuex from 'vuex'
+import store from './vuex/store'
 
 Vue.prototype.common = Common_
 

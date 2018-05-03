@@ -7,10 +7,10 @@
               <div class="wd_tx">
                 <img src="../../static/img/wd_tx.png" alt="">
               </div>
-              <div class="wd_mc">小白菜姐姐</div>
+              <div class="wd_mc">{{name}}</div>
               <div class="wd_qd">
                 <a v-if="qd==1" class="qd_btn">已签到</a>
-                <yd-button v-else class="qd_btn go_qd" @click.native="qd_show = true">去签到</yd-button>
+                <yd-button v-else class="qd_btn go_qd" @click.native="signIn">去签到</yd-button>
                 <!-- 点击去签到弹窗内容 -->
                 <yd-popup v-model="qd_show" position="center" width="5.02rem">
                     <div class="sigIn_winClose" @click="qd_show = false"></div>
@@ -18,35 +18,14 @@
                         <p class="sigIn_tit">签到成功</p>
                         <p class="sigIn_7day">连续签到7天可获得大礼包</p>
                         <div class="sigIn_day">
-                          <div class="numDay">
-                            <div class="numDay_bg">1</div>
-                            <p class="oneIntegral">1积分</p>
+                          <div class="numDay" v-for="(item,index) in log" :key="index">
+                            <div class="numDay_bg active" v-if="item.is_sign==1">{{index+1}}</div>
+                            <div class="numDay_bg" v-else>{{index+1}}</div>
+                            <p class="oneIntegral">{{item.get}}积分</p>
                           </div>
-                          <div class="numDay">
-                            <div class="numDay_bg">2</div>
-                            <p class="oneIntegral">1积分</p>
-                          </div>
-                          <div class="numDay">
-                            <div class="numDay_bg">3</div>
-                            <p class="oneIntegral">1积分</p>
-                          </div>
-                          <div class="numDay">
-                            <div class="numDay_bg">4</div>
-                            <p class="oneIntegral">1积分</p>
-                          </div>
-                          <div class="numDay">
-                            <div class="numDay_bg">5</div>
-                            <p class="oneIntegral">1积分</p>
-                          </div>
-                          <div class="numDay">
-                            <div class="numDay_bg">6</div>
-                            <p class="oneIntegral">1积分</p>
-                          </div>
-                          <div class="numDay">
-                            <div class="numDay_bg">7</div>
-                            <p class="oneIntegral">1积分</p>
-                          </div>
+
                         </div>
+                        
                          <a class="sigIn_btn"><span>已经连续签到1天</span></a>
                     </div>
                    
@@ -56,7 +35,7 @@
             <div class="wd_jb">
               <div class="jinbi">
                 <img src="../../static/img/wd_xx.png" >
-                <span class="jinbi_l">9999</span>
+                <span class="jinbi_l">{{coin}}</span>
               </div>
               <div class="chongzhi">
                 <router-link :to="{path:'/personal/payCenter'}">
@@ -79,38 +58,42 @@
           </div>
           <div class="wd_sec">
             <div class="wd_list jfcj">
-              <router-link :to="{path:'/personal/lottery'}">
+              <a @click="lettery">
                 <img src="../../static/img/wd_jfsj.png" alt="">
                 <span class="jfcj_tit">积分抽奖</span>
                 <span class="wd_rg jfcj_rg"></span>
-              </router-link>
+              </a>
             </div>
             <div class="wd_list tgyx">
-              <router-link :to="{path:'/personal/share'}">
+              <a @click="share">
                 <img src="../../static/img/wd_tgyx.png" alt="">
                 <span class="jfcj_tit">推广游戏</span>
                 <span class="wd_rg jfcj_rg"></span>
-              </router-link>
+              </a>
             </div>
             <div class="wd_list jfjl">
-              <router-link :to="{path:'/personal/creditsLog'}">
+              <a @click="credits">
                 <img src="../../static/img/wd_jfjl.png" alt="">
                 <span class="jfcj_tit">积分记录</span>
                 <span class="wd_rg jfcj_rg"></span>
-              </router-link>
+              </a>
             </div>
             <div class="wd_list lbjl">
-              <img src="../../static/img/wd_lbjl.png" alt="">
-              <span class="jfcj_tit">礼包记录</span>
-              <span class="wd_rg jfcj_rg"></span>
-            </div>
-            <div class="wd_list mmxg"  @click="changepwd">
-                <img src="../../static/img/wd_mmxg.png" alt="">
-                <span class="jfcj_tit">密码修改</span>
+              <a @click="Noyer">
+                <img src="../../static/img/wd_lbjl.png" alt="">
+                <span class="jfcj_tit">礼包记录</span>
                 <span class="wd_rg jfcj_rg"></span>
+              </a>
+            </div>
+            <div class="wd_list mmxg">
+                <a @click="Noyer">
+                  <img src="../../static/img/wd_mmxg.png" alt="">
+                  <span class="jfcj_tit">密码修改</span>
+                  <span class="wd_rg jfcj_rg"></span>
+                </a>
             </div>
           </div>
-          <a href="" class="jftx_btn"><span>积分提现</span></a>
+          <a @click="Integra" class="jftx_btn"><span>积分提现</span></a>
         </div>
       </div>
       <div class="footer_nav">
@@ -121,25 +104,71 @@
 </template>
 
 <script>
+import Axios from 'axios'
 export default {
   data(){
     return{
       dlzt:2,
       qd:0,
-      qd_show:false
+      qd_show:false,
+      name:'',
+      coin:'',
+      log:[]
     }
     
   },
+  created:function(){
+    
+    this.name = window.sessionStorage.getItem('name')
+    this.coin = window.sessionStorage.getItem('coin')
+    const dlzt =window.sessionStorage.getItem('dlzt')
+    if (dlzt==null) {
+      this.dlzt=2;
+    }else{
+      this.dlzt=dlzt
+    }
+  },
   methods:{
-    changepwd(){
-        this.$router.push({path:'/changepwd',query:{id:'changepwd'}});
+    signIn(){
+      let apiUrl=this.common.apiUrl;
+      let tokenLogin = window.localStorage.getItem('token');
+      Axios({
+        method:'post',
+        url:apiUrl+'Cis/SignIn',
+        params:{
+            token:tokenLogin
+        },
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
+        },
+      })
+      .then((res)=>{
+        this.qd_show=true
+        this.qd = 1
+        this.log = res.data.d.log
+      })
+      .catch((error)=>{
+        alert("网络错误，不能访问！");
+      })
     },
     login(){
         this.$router.push({path:'/changepwd',query:{id:'login'}});
     },
-    
-        
-
+    lettery(){
+        this.$router.push({path:'/personal/lottery'});
+    },
+    share(){
+      this.$router.push({path:'/personal/share'});
+    },
+    credits(){
+      this.$router.push({path:'/personal/creditsLog'});
+    },
+    Noyer(){
+      alert("改功能暂未开放")
+    },
+    Integra(){
+      this.$router.push({path:'/changepwd',query:{id:'login'}});
+    }
   }
 }
 </script>
@@ -349,7 +378,7 @@ export default {
       line-height: .38rem;
       border-radius: .25rem;
       position: relative;
-      z-index: -1;
+      z-index: 0;
       bottom: -.5rem;
         span{
             display: inline-block;
@@ -421,13 +450,17 @@ export default {
               text-align: center;
               margin-top: .12rem;
             }
+            .active{
+              background: url(../../static/img/yqd_icon.png) no-repeat !important;
+              background-size:.49rem .66rem !important;
+            }
           }
           .numDay:last-child{
               .numDay_bg{
                 background: url(../../static/img/yqd7_icon.png) no-repeat;
                 background-size:.49rem .66rem;
               }
-            }
+          }
         }
       .sigIn_btn{
           width: 2.36rem;

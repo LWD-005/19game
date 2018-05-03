@@ -1,5 +1,6 @@
 <template>
   <div class="index">
+    <yd-pullrefresh :callback="freshList" ref="pullrefresh">
     <!-- 首页轮播图 -->
     <div class="banner">
       <yd-slider autoplay="5000">
@@ -41,23 +42,27 @@
       </div>
       <div class="sy_hero">
         <div class="hero_icon" v-for="(item,index) in hotList.slice(0,3)" :key="index">
-          <div class="hero_img">
-            <img :src="item.icon">
-          </div>
-          <p class="hero_bt">{{item.name}}</p>
-          <p class="hreo_rl">{{item.size}}m</p>
-          <p class="hreo_start"><span class="dian_star"></span><span class="dian_star"></span><span class="dian_star"></span><span class="dian_star"></span><span class="dian_star"></span><span class="hero_pf">{{item.score}}</span></p>
+          <router-link :to="{path:'/download',query:{id:item.id}}">
+            <div class="hero_img">
+              <img :src="item.icon">
+            </div>
+            <p class="hero_bt">{{item.name}}</p>
+            <p class="hreo_rl">{{item.size}}m</p>
+          </router-link>  
+          <p class="hreo_start"><span class="dian_star" v-for="(statr,yindex) in 5" :key="yindex" v-if="yindex<item.score"></span><span class="dian_wstar" v-for="statr in (5-item.score)" :key="statr.id"></span><span class="hero_pf">{{item.score}}</span></p>
           <!-- <a href="" class="btn btn-danger hero_btn">下载</a> -->
           <a :href="item.download_path" v-if="down_zt==0" class="btn btn-danger Down_btn"><span>下载</span></a>
-          <a :href="item.download_path" v-else-if="down_zt==1" class="btn btn-danger hero_btn"><i></i>15%</a>
+          <a :href="item.download_path" v-else-if="down_zt==1" class="btn btn-danger hero_btn"><i></i>15%</a> 
           <a :href="item.download_path" v-else class="btn btn-danger hero_btn  hero_jx">继续</a>
+          
         </div>
 
       </div>
 
       <!-- 首页列表 -->
       <div class="sy_list">
-         <yd-infinitescroll :callback="loadList" ref="infinitescrollDemo">
+        
+         <yd-infinitescroll :callback="loadMore" ref="infinitescrollDemo">
             <yd-list theme="2" slot="list">
               <div class="list_hero" v-for="(item, index) in list" :key="index">
                 <div class="list_img"><img :src="item.icon"></div>
@@ -104,12 +109,14 @@
             <img slot="loadingTip" src="http://static.ydcss.com/uploads/ydui/loading/loading10.svg"/>
 
         </yd-infinitescroll>
-        
+      
       </div>
     </div>
+     </yd-pullrefresh>  
      <div class="footer_nav">
         <my-nav></my-nav>
       </div>
+     
   </div>
 </template>
 
@@ -127,15 +134,54 @@ export default {
       page:1,
       down_zt:0,
       widthI:3.9,
-      pageSize:10,
+      count:10,
       CarouselList:[],
       list:[],
       hotList:[]
     }
   },
   methods:{
-    loadList(){
-    
+    freshList() {
+        this.page= 1;
+        this.get_data1();
+    },
+    loadMore() {
+        this.page++;
+        console.log(this.page)
+        this.get_data1();
+    },
+    get_data1() {
+        let json = {
+            page: this.page,
+            count: this.count,
+        };
+
+        let apiUrl=this.common.apiUrl;
+        Axios({
+            method:'post',
+            url:apiUrl+'Game/GameList',
+            params:json
+        }).then((res)=>{
+            if (res.data != null) {
+                if (this.page== 1) {
+                    this.list=res.data.d.list;
+                    this.$refs.pullrefresh.$emit("ydui.pullrefresh.finishLoad");
+                } else {
+                    this.list = res.data.d.list;
+                    this.list.forEach((item,index) => {
+                        this.list.push(item);
+                    })
+                }
+                if (res.data.d.list.length != 10) {
+                this.$refs.infinitescrollDemo.$emit("ydui.infinitescroll.loadedDone");
+                return;
+                } else {
+                this.$refs.infinitescrollDemo.$emit("ydui.infinitescroll.finishLoad");
+                }
+                this.$refs.infinitescrollDemo.$emit("ydui.infinitescroll.reInit");
+            }
+        })
+    //
     }
   },
   created(){
@@ -156,12 +202,22 @@ export default {
       },
     }).then((res)=>{
       this.hotList=res.data.d.list;
-    });
-    Axios.post(apiUrl+'Game/GameList')
-    .then((res)=>{
-    this.list=res.data.d.list;
     })
-    .catch(error=>{
+    .catch((error)=>{
+      console.log(error);
+      alert("网络错误，不能访问");
+    });
+    Axios({
+      method:'post',
+      url:apiUrl+'Game/GameList',
+      params:{
+        page:this.page,
+        count:this.count
+      },
+    }).then((res)=>{
+      this.list=res.data.d.list;
+    })
+    .catch((error)=>{
       console.log(error);
       alert("网络错误，不能访问");
     });
@@ -226,6 +282,7 @@ export default {
       img{
         width: 100%;
         height: 100%;
+        border-radius: .09rem;
       }
     }
     .hero_bt{
@@ -246,6 +303,14 @@ export default {
         width: .17rem;
         height: .17rem;
         background: url(../../static/img/star.png) no-repeat;
+        background-size: .17rem .17rem;
+        margin-right: .05rem;
+      }
+      .dian_wstar{
+        display: inline-block;
+        width: .17rem;
+        height: .17rem;
+        background: url(../../static/img/wstar.png) no-repeat;
         background-size: .17rem .17rem;
         margin-right: .05rem;
       }

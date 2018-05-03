@@ -86,12 +86,12 @@ import Axios from "axios";
 //       )
 //   }
 // }
-const apiUrl = "http://19centre.tk/api/";
-  Axios.get(apiUrl+'Base/CarouselList')
-.then((res)=>{
- this.CarouselList=res.data.d.list;
-})
-.catch(error=>{
-  console.log(error);
-  alert("网络错误，不能访问");
-})
+// const apiUrl = "http://19centre.tk/api/";
+// Axios.get(apiUrl+'Base/CarouselList')
+// .then((res)=>{
+//  this.CarouselList=res.data.d.list;
+// })
+// .catch(error=>{
+//   console.log(error);
+//   alert("网络错误，不能访问");
+// })

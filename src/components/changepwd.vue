@@ -43,30 +43,30 @@
              <input type="password" placeholder="请输入密码" class="login_ipt loginPage_ipt" v-model="loginPwd">
         </div>
         <a @click="Login" class="review_btn register_btn"><span>登陆</span></a>
-        <p class="login_p"><a @click="register" class="qRegister">快速注册</a><a class="lostPwd">忘记密码？</a></p>
+        <p class="login_p"><a @click="register" class="qRegister">快速注册</a><a @click="changepwd" class="lostPwd">忘记密码？</a></p>
     </div>
-     <!-- 修改密码页 -->
+     <!-- 忘记密码页 -->
      <div class="login"   v-if="loginId == 'changepwd'">
         <div class="login_phone">
              <div class="phone_icon">
                  <img src="../../static/img/phone_icon.png" alt="">
              </div>
-             <input type="text" placeholder="请输入注册手机号码" class="login_ipt phone_ipt">
+             <input type="number" v-model="forgetPhone" placeholder="请输入注册手机号码" class="login_ipt phone_ipt">
         </div>
         <div class="login_phone login_verification" >
              <div class="phone_icon verification_icon">
                  <img src="../../static/img/verification.png" alt="">
              </div>
-             <input type="text" placeholder="请输入您的验证码" class="login_ipt phone_ipt">
-             <a class="verification_btn"><span>{{btntxt}}</span></a>
+             <input type="text" v-model="forgetCode" placeholder="请输入您的验证码" class="login_ipt phone_ipt">
+             <button @click="ForgetSendcode" type="button" :disabled='disabled' class="verification_btn"><span>{{btntxt}}</span></button>
         </div>
          <div class="login_phone login_pwd">
              <div class="phone_icon">
                  <img src="../../static/img/newpwd.png" alt="">
              </div>
-             <input type="text" placeholder="请输入您的新密码" class="login_ipt phone_ipt">
+             <input type="password" v-model="forgetPwd" placeholder="请输入您的新密码" class="login_ipt phone_ipt">
         </div>
-        <a href="" class="review_btn"><span>确认修改</span></a>
+        <a @click="Forget" class="review_btn"><span>确认修改</span></a>
      </div>
   </div>
   
@@ -74,6 +74,7 @@
 
 <script>
 import Axios from 'axios'
+
 export default {
     data(){
          return{
@@ -86,14 +87,48 @@ export default {
             type:'',
             isShow:false,
             loginPhone:'',
-            loginPwd:''
+            loginPwd:'',
+            forgetPhone:'',
+            forgetPwd:'',
+            forgetCode:'',
          }
     },
-  methods:{
+    created:function(){
+        let apiUrl=this.common.apiUrl;
+         let tokenLogin = window.localStorage.getItem('token');
+        if(tokenLogin==undefined){
+            this.loginPhone ==''
+        }else{
+            Axios({
+                method:'post',      
+                url:apiUrl+'Cis/Token',
+                params:{
+                    token:tokenLogin
+                },
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
+                },
+            })
+            .then((res)=>{
+                if(res.status==200){
+                    this.loginPhone = res.data.d.phone
+                }
+            })
+            .catch((error)=>{
+                console.log(error);
+                alert("网络错误，不能访问！");
+            })
+        }
+    },
+    methods:{
      register(){
          this.$router.replace({path:'/changepwd',query:{id:'register'}});
         window.location.reload()
      },
+    changepwd(){
+        this.$router.push({path:'/changepwd',query:{id:'changepwd'}});
+        window.location.reload()
+    },
      //验证手机号码部分
     sendcode(){
         var reg=11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/;
@@ -187,12 +222,70 @@ export default {
             alert("密码不能为空！")
         }else{
             let apiUrl=this.common.apiUrl;
+            if (window.localStorage.getItem('token')==undefined) {
+                Axios({
+                    method:'post',      
+                    url:apiUrl+'Cis/Login',
+                    params:{
+                        phone:this.loginPhone,
+                        password:this.loginPwd
+                    },
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
+                    },
+                })
+                .then((res)=>{
+                    if(res.status==200){
+                        window.localStorage.setItem('token',res.data.token);
+                        window.sessionStorage.setItem('name',res.data.d.name);
+                        window.sessionStorage.setItem('coin',res.data.d.coin);
+                        window.sessionStorage.setItem('dlzt',1);
+                        this.$router.push({path:'/'});
+                    }
+                })
+                .catch((error)=>{
+                    console.log(error);
+                    alert("网络错误，不能访问！");
+                })
+            } else {
+                let tokenLogin = window.localStorage.getItem('token');
+                Axios({
+                    method:'post',      
+                    url:apiUrl+'Cis/Token',
+                    params:{
+                        token:tokenLogin
+                    },
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
+                    },
+                })
+                .then((res)=>{
+                    if(res.status==200){
+                        window.sessionStorage.setItem('dlzt',1);
+                        window.sessionStorage.setItem('name',res.data.d.name);
+                        window.sessionStorage.setItem('coin',res.data.d.coin);
+                        this.$router.push({path:'/'});
+                    }
+                })
+                .catch((error)=>{
+                    console.log(error);
+                    alert("网络错误，不能访问！");
+                })
+            }
+        }
+        
+    },
+    ForgetSendcode(){
+        var reg=11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/;
+        if(this.forgetPhone==''|| !reg.test(this.forgetPhone)){
+            alert("请输入手机号码！");
+        }else{
+            let apiUrl=this.common.apiUrl;
             Axios({
-                method:'post',      
-                url:apiUrl+'Cis/Login',
+                method:'post', 
+                url:apiUrl+'Base/Sendsms',
                 params:{
-                    phone:this.loginPhone,
-                    password:this.loginPwd
+                    phone:this.forgetPhone,
                 },
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
@@ -200,7 +293,47 @@ export default {
             })
             .then((res)=>{
                 if(res.status==200){
-                    this.$router.push({path:'/'});
+                    if(res.data.d==undefined){
+                        alert(res.data.msg);
+                    }else{
+                        alert(res.data.d.m);
+                    }
+                }
+            })
+            .catch((error)=>{
+                console.log(error);
+                alert("网络错误，不能访问！");
+            })
+            this.time=120;
+            this.disabled=true;
+            this.timer();
+        }
+    },
+    Forget(){
+        if(this.forgetPhone==''){
+            alert("请输入正确的手机号码！");
+        }else if(this.forgetPwd == ''){
+            alert("请输入6-16位密码！");
+        }else if(this.forgetPwd.length>15 || this.forgetPwd.length<5){
+            alert("密码格式不对！");
+        }else{
+            let apiUrl=this.common.apiUrl;
+            Axios({
+                method:'post',      
+                url:apiUrl+'Cis/Forget',
+                params:{
+                    phone:this.forgetPhone,
+                    password:this.forgetPwd,
+                    code:1234
+                },
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
+                },
+            })
+            .then((res)=>{
+                if(res.status==200){
+                    alert("请求成功，暂时没有修改")
+                    console.log(res);
                 }
             })
             .catch((error)=>{
