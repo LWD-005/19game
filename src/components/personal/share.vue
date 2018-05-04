@@ -9,20 +9,25 @@
           </div>
       </div>
       <div class="QR_code">
-          <img :src="imgSrc+'share_qr.png'" alt="">
+          <img :src="img" alt="">
       </div>
       
   </div>
 </template>
 
 <script>
-
+import Axios from 'axios'
 export default {
   data(){
       return{
           imgSrc:this.common.imgSrc,
+          img:""
       }
   },
+  created(){
+      let apiUrl=this.common.apiUrl;
+      this.img = apiUrl+'Cis/Share'
+  }
 }
 </script>
 

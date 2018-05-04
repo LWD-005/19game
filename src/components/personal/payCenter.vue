@@ -8,41 +8,33 @@
       </div>
       <div class="payCenter_uplink">
           <yd-accordion>
-            <yd-accordion-item title="请选择游戏">
-                <div style="padding: .24rem;">
-                    <p>花间一壶酒，独酌无相亲。</p>
-                    <p>举杯邀明月，对影成三人。</p>
-                    <p>月既不解饮，影徒随我身。</p>
-                    <p>暂伴月将影，行乐须及春。</p>
-                    <p>我歌月徘徊，我舞影零乱。</p>
-                    <p>醒时同交欢，醉后各分散。</p>
-                    <p>永结无情游，相期邈云汉。</p>
-                </div>
-            </yd-accordion-item>
-            <yd-accordion-item title="请选择区服">
-                <div style="padding: .24rem;">
-                    <p>岱宗夫如何，齐鲁青未了。</p>
-                    <p>造化钟神秀，阴阳割昏晓。</p>
-                    <p>荡胸生层云，决眦入归鸟。</p>
-                    <p>会当凌绝顶，一览众山小。</p>
-                </div>
-            </yd-accordion-item>
-            <yd-accordion-item title="请选择角色">
-                <div style="padding: .24rem;">
-                    <p>言入黄花川，每逐青溪水。</p>
-                    <p>随山将万转，趣途无百里。</p>
-                    <p>声喧乱石中，色静深松里。</p>
-                    <p>漾漾泛菱荇，澄澄映葭苇。</p>
-                    <p>我心素已闲，清川澹如此。</p>
-                    <p>请留盘石上，垂钓将已矣。</p>
-                </div>
-            </yd-accordion-item>
+           <div @click="gameList">
+                <yd-accordion-item :title=is_game>
+                    <div style="padding: .24rem;">
+                        <p @click.stop="isGame(item.name,item.id)" v-for="(item,index) in Glist" :key="index">{{item.name}}</p>
+                    </div>
+                </yd-accordion-item>
+           </div>
+           <div @click="serverList">
+               <yd-accordion-item :title=is_server>
+                    <div style="padding: .24rem;">
+                        <p @click.stop="isServer(item.name,item.id)" v-for="(item,index) in server" :key="index">{{item.name}}</p>
+                    </div>
+                </yd-accordion-item>
+           </div>
+            <div @click="roleList">
+               <yd-accordion-item :title=is_role>
+                    <div style="padding: .24rem;">
+                        <p @click.stop="isRole(item.name)" v-for="(item,index) in role" :key="index">{{item.name}}</p>
+                    </div>
+                </yd-accordion-item>
+           </div>
         </yd-accordion>
       </div>
       <div class="credit">
           <p class="credit_tit">充值金额</p>
           <div class="credit_list">
-              <div  :class="{active:item.isActive}" v-for="(item,index) in creditList" :key="index"  @click="activeFun(item)">￥{{item.money}}元<i class="credit_pitch"></i></div>
+              <div :class="{active:item.isActive}" v-for="(item,index) in creditList" :key="index"  @click="activeFun(item)">￥{{item.money}}元<i class="credit_pitch"></i></div>
           </div>
       </div>
        <div class="prePaid">
@@ -57,18 +49,42 @@
           </div>
 
       </div>
-      <router-link :to="{path:'/changepwd'}">
-          <button class="payLogin">登陆</button>
-      </router-link>
+      <!-- <router-link :to="{path:'/changepwd'}"> -->
+          <button @click="Recharge" class="payLogin">充值</button>
+      <!-- </router-link> -->
   </div>
   
 </template>
 
 <script>
+import Axios from 'axios'
+
 export default {
     data(){
         return{
             imgSrc:this.common.imgSrc,
+            prePaidList:[
+                // {
+                //     className:"Unionpay",
+                //     imageSrc:"../../../static/img/Unionpay.png",
+                //     prePaidList_tit:"银行卡支付",
+                //     isPitch:true
+                // },
+                {
+                    className:"WeChat",
+                    imageSrc:"../../../static/img/WeChat.png",
+                    prePaidList_tit:"微信支付",
+                    isPitch:true,
+                    pay:2
+                },
+                {
+                    className:"Alipay",
+                    imageSrc:"../../../static/img/Alipay.png",
+                    prePaidList_tit:"支付宝支付",
+                    isPitch:false,
+                    pay:1
+                },
+            ],
             creditList:[
                 {
                     money:"500",
@@ -87,26 +103,16 @@ export default {
                     isActive:false
                 },
             ],
-            prePaidList:[
-                {
-                    className:"Unionpay",
-                    imageSrc:"../../../static/img/Unionpay.png",
-                    prePaidList_tit:"银行卡支付",
-                    isPitch:true
-                },
-                {
-                    className:"WeChat",
-                    imageSrc:"../../../static/img/WeChat.png",
-                    prePaidList_tit:"微信支付",
-                    isPitch:false
-                },
-                {
-                    className:"Alipay",
-                    imageSrc:"../../../static/img/Alipay.png",
-                    prePaidList_tit:"支付宝支付",
-                    isPitch:false
-                },
-            ]
+            Glist:[],
+            is_game:'请选择游戏',
+            server:[],
+            gameid:'',
+            is_server:'请选择区服',
+            serverid:'',
+            role:[],
+            is_role:'请选择角色',
+            amount:500,
+            payway:2
         }
         
     },
@@ -116,15 +122,126 @@ export default {
                     obj.isActive = false;
                 });
                 data.isActive = !data.isActive;
+                this.amount = data.money
             },
         pitchFun:function(data){
             this.prePaidList.forEach(function( pitchObj){
                     pitchObj.isPitch = false;
                 });
                 data.isPitch = !data.isPitch;
+                 this.payway = data.pay
+        },
+        gameList:function(){
+            let apiUrl=this.common.apiUrl;
+            let tokenLogin = window.localStorage.getItem('token');
+            Axios({
+                method:'post',
+                url:apiUrl+'Game/GetRole',
+                params:{
+                    token:tokenLogin,
+                    type:1
+                },
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
+                },
+            })
+            .then((res)=>{
+                this.Glist=res.data.d.list
+            })
+            .catch((error)=>{
+                alert('网络错误，不能访问')
+            })
+        },
+        isGame(gameName,gameId){
+            this.is_game=gameName
+            this.gameid = gameId
+        },
+        serverList:function(){
+            let apiUrl=this.common.apiUrl;
+            let tokenLogin = window.localStorage.getItem('token');
+            Axios({
+                method:'post',
+                url:apiUrl+'Game/GetRole',
+                params:{
+                    token:tokenLogin,
+                    type:2,
+                    gameid:this.gameid
+                },
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
+                },
+            })
+            .then((res)=>{
+                this.server=res.data.d.list
+            })
+            .catch((error)=>{
+                alert('网络错误，不能访问')
+            })
+        },
+        isServer(serverName,serverId){
+            this.is_server=serverName
+            this.serverid = serverId
+        },
+        roleList:function(){
+            let apiUrl=this.common.apiUrl;
+            let tokenLogin = window.localStorage.getItem('token');
+            Axios({
+                method:'post',
+                url:apiUrl+'Game/GetRole',
+                params:{
+                    token:tokenLogin,
+                    type:2,
+                    gameid:this.gameid,
+                    serverid:this.serverid
+                },
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
+                },
+            })
+            .then((res)=>{
+                this.role=res.data.d.list
+            })
+            .catch((error)=>{
+                alert('网络错误，不能访问')
+            })
+        },
+        isRole(roleName){
+            this.is_role=roleName
+        },
+        Recharge:function(){
+            if (this.is_game=='请选择游戏') {
+                alert("请选择您的游戏")
+            }else if(this.is_server=='请选择区服') {
+                alert("请选择您的区服")
+            }else if (this.is_role=='请选择角色'){
+                alert("请选择您的角色")
+            }else{
+                let apiUrl=this.common.apiUrl;
+                let tokenLogin = window.localStorage.getItem('token');
+                Axios({
+                    method:'post',
+                    url:apiUrl+'Fina/Recharge',
+                    params:{ 
+                        token:tokenLogin,
+                        gameid:this.gameid,
+                        amount:this.amount,
+                        payway:this.payway
+                    },
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
+                    },
+                })
+                .then((res)=>{
+                    alert(res.data.d.m)
+                    console.log(res)
+                })
+                .catch((error)=>{
+                    alert('网络错误，不能访问')
+                })
+            }
         }
     },
-        
+    
 }
 
 </script>

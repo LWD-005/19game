@@ -155,20 +155,39 @@ export default {
         this.$router.push({path:'/changepwd',query:{id:'login'}});
     },
     lettery(){
+      if (this.dlzt==1) {
         this.$router.push({path:'/personal/lottery'});
+      } else {
+        this.$router.push({path:'/changepwd',query:{id:'login'}});
+      }
+        
     },
     share(){
-      this.$router.push({path:'/personal/share'});
+      if (this.dlzt==1) {
+        this.$router.push({path:'/personal/share'});
+      } else {
+        this.$router.push({path:'/changepwd',query:{id:'login'}});
+      }
+      
     },
     credits(){
-      this.$router.push({path:'/personal/creditsLog'});
+      if (this.dlzt==1) {
+        this.$router.push({path:'/personal/creditsLog'});
+      } else {
+        this.$router.push({path:'/changepwd',query:{id:'login'}});
+      }
+      
     },
     Noyer(){
-      alert("改功能暂未开放")
+      alert("该功能暂未开放")
     },
     Integra(){
-      this.$router.push({path:'/changepwd',query:{id:'login'}});
-    }
+      if (this.dlzt==1) {
+        alert("积分提现请到公众号")
+      } else {
+        this.$router.push({path:'/changepwd',query:{id:'login'}});
+      }
+    }  
   }
 }
 </script>

@@ -13,6 +13,9 @@
                     <div class="search_k">
                         <input type="text" placeholder="搜索更多福利" v-model.trim="keywork">
                         <a href="" class="sea_icon"></a>
+                        <ul>
+                            <li v-for="(item,index) in search" :key="index">{{item.gamename}}</li>
+                        </ul>
                     </div>
                 </form>
             </div>
@@ -98,11 +101,13 @@ export default {
     },
     watch: {
     //watch title change
-        title() {
-        delay(() => {
-            this.fetchData();
-        }, 300);
+        keywork() {
+            
+            delay(() => {
+                this.fetchData();
+            }, 300);
         },
+        
     },
     created:function(){
         let apiUrl=this.common.apiUrl;
@@ -116,7 +121,7 @@ export default {
             })
             .then((res)=>{
                 this.list=res.data.d.list;
-                
+
             })
             .catch((error)=>{
                 console.log(error);
@@ -153,7 +158,7 @@ export default {
                         this.gitlist = res.data.d.list;
                         this.gitlist.forEach((item,index) => {
                             this.list.push(item);
-                            
+
                         })
                     }
                     if (res.data.d.list.length != 10) {
@@ -169,20 +174,25 @@ export default {
         },
         fetchData(){
             let apiUrl=this.common.apiUrl;
-            Axios({
-                method:'post',
-                url:apiUrl+'Game/GiftList',
-                params:{
-                    keywork:this.keywork
-                }
-            })
-            .then((res)=>{
-                console.log();
-            })
-            .catch((error)=>{
-                 console.log(error);
-                alert("网络错误，不能访问");
-            })
+            if(this.keywork==''){
+                this.search=''
+            }else{
+                Axios({
+                    method:'post',
+                    url:apiUrl+'Game/GiftList',
+                    params:{
+                        keywork:this.keywork
+                    }
+                })
+                .then((res)=>{
+                    this.search = res.data.d.list
+                })
+                .catch((error)=>{
+                    console.log(error);
+                    alert("网络错误，不能访问");
+                })
+            }
+            
         }
       }
     
@@ -206,6 +216,7 @@ export default {
             top: .18rem;
             left: .24rem;
             overflow: hidden;
+            z-index: 99;
             .back_btn{
                 float: left;
                 width: .18rem;
@@ -243,6 +254,13 @@ export default {
                         display: block;
                         margin-right: .27rem;
                         margin-top: .1rem;
+                    }
+                    ul{
+                        background: #fff;
+                        width: 5rem;
+                        padding-left: .2rem;
+                        margin-left: .2rem;
+                        
                     }
                 }
             }

@@ -6,73 +6,191 @@
           </div>
           <p class="creditsLog_tit">积分明细</p>
       </div>
-      <div class="creditsLog_list">
-          <div class="prepaidTime">
-              <img :src="imgSrc+'prepaidTime_icon.png'" alt="">
-              <span class="prepaid_time"><span class="prepaid_day">2018-03-30</span><span class="prepaid_noon">上午</span></span>
-          </div>
-          <div class="buyPoints" v-for="(item, index) in pointsList" :key="index" v-if="item.pointsType==1">
-              <img :src="imgSrc+'prepaid_icon.png'" alt="">
-              <div class="points">
-                  <p class="points_tit">积分充值</p>
-                  <p class="buy_time">{{item.pointsTime}}</p>
-              </div>
-              <div class="points_sum">
-                  <span class="sum">+{{item.pointsNum}}<i class="buy_icon"></i></span>
-              </div>
-          </div>
-          <div class="buyPoints" v-else>
-              <img :src="imgSrc+'convert_icon.png'" alt="">
-              <div class="points">
-                  <p class="points_tit">积分兑换</p>
-                  <p class="buy_time">{{item.pointsTime}}</p>
-              </div>
-              <div class="convert_num">
-                  <span class="num">-{{item.pointsNum}}<i class="num_icon"></i></span>
-              </div>
-          </div>
-      </div>
+        <yd-pullrefresh :callback="freshList" ref="pullrefresh">
+            <yd-infinitescroll :callback="loadMore" ref="infinitescrollDemo">
+                <yd-list theme="1" slot="list">
+                    <div class="creditsLog_list">
+                        <div  v-for="(item, index) in pointsList" :key="index" >
+                            <div class="prepaidTime" v-if="item.time ==item.time">
+                                <img :src="imgSrc+'prepaidTime_icon.png'" alt="">
+                                <span class="prepaid_time"><span class="prepaid_day">{{item.time | datesj}}</span><span class="prepaid_noon"></span></span>
+                            </div>
+                            <div class="buyPoints" v-if="item.type==2">
+                                <img :src="imgSrc+'convert_icon.png'" alt="">
+                                <div class="points">
+                                    <p class="points_tit">积分兑换</p>
+                                    <p class="buy_time">{{item.time | date}}</p>
+                                </div>
+                                <div class="convert_num">
+                                    <span class="num">-{{item.count}}<i class="num_icon"></i></span>
+                                </div>
+                            </div>
+                            <div class="buyPoints" v-else>
+                                <img :src="imgSrc+'prepaid_icon.png'" alt="">
+                                <div class="points">
+                                    <p class="points_tit">积分充值</p>
+                                    <p class="buy_time">{{item.time | date}}</p>
+                                </div>
+                                <div class="points_sum">
+                                    <span class="sum">+{{item.count}}<i class="buy_icon"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </yd-list>
+
+                <!-- 数据全部加载完毕显示 -->
+                <span slot="doneTip">啦啦啦，啦啦啦，没有数据啦~~</span>
+
+                <!-- 加载中提示，不指定，将显示默认加载中图标 -->
+                <img slot="loadingTip" src="http://static.ydcss.com/uploads/ydui/loading/loading10.svg"/>
+
+            </yd-infinitescroll>
+        </yd-pullrefresh>   
   </div>
 </template>
 
 
 <script>
+import Axios from 'axios'
 export default {
     data(){
         return{
             imgSrc:this.common.imgSrc,
-            pointsList:[
-                {
-                    pointsType:1,//值为1是积分充值，为0是积分兑换
-                    pointsTime:'7:00',
-                    pointsNum:'10000'
-                },
-                 {
-                    pointsType:1,//值为1是积分充值，为0是积分兑换
-                    pointsTime:'7:00',
-                    pointsNum:'10000'
-                },
-                 {
-                    pointsType:1,//值为1是积分充值，为0是积分兑换
-                    pointsTime:'7:00',
-                    pointsNum:'10000'
-                },
-                 {
-                    pointsType:2,//值为1是积分充值，为0是积分兑换
-                    pointsTime:'18:45',
-                    pointsNum:'100'
-                },
-                 {
-                    pointsType:1,//值为1是积分充值，为0是积分兑换
-                    pointsTime:'7:00',
-                    pointsNum:'10000'
-                },
-                 {
-                    pointsType:1,//值为1是积分充值，为0是积分兑换
-                    pointsTime:'7:00',
-                    pointsNum:'10000'
+            page:1,
+            count:10,
+            pointsList:[],
+            itemTime:[]
+        }
+    },
+    created(){
+        let apiUrl=this.common.apiUrl;
+        let tokenLogin = window.localStorage.getItem('token');
+        Axios({
+            method:'post',
+            url:apiUrl+'Fina/RechargeLog',
+            params:{
+                token:tokenLogin,
+                page:this.page,
+                count:10
+            },
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
+            },
+        })
+        .then((res)=>{
+            this.pointsList = res.data.d.log;
+            this.pointsList.forEach((item,index)=>{
+                this.itemTime = item.time
+                
+            })
+        })
+        .catch((error)=>{
+            alert("网络错误，不能访问")
+        })
+    },
+    methods:{
+        freshList() {
+
+            this.page= 1;
+            this.get_data1();
+        },
+        loadMore() {
+            this.page++;
+            this.get_data1();
+        },
+        get_data1() {
+            let tokenLogin = window.localStorage.getItem('token');
+            let json = {
+                token:tokenLogin,
+                page: this.page,
+                count: this.count,
+            };
+
+            let apiUrl=this.common.apiUrl;
+            Axios({
+                method:'post',
+                url:apiUrl+'Fina/RechargeLog',
+                params:json
+            }).then((res)=>{
+                if (res.data != null) {
+                    if (this.page== 1) {
+                        this.pointsList=res.data.d.log;
+                        this.$refs.pullrefresh.$emit("ydui.pullrefresh.finishLoad");
+                    } else {
+                        this.pointsList = res.data.d.log;
+                        this.pointsList.forEach((item,index) => {
+                            this.pointsList.push(item);
+                        })
+                    }
+                    if (res.data.d.log.length != 10) {
+                    this.$refs.infinitescrollDemo.$emit("ydui.infinitescroll.loadedDone");
+                    return;
+                    } else {
+                    this.$refs.infinitescrollDemo.$emit("ydui.infinitescroll.finishLoad");
+                    }
+                    this.$refs.infinitescrollDemo.$emit("ydui.infinitescroll.reInit");
                 }
-            ]
+            })
+        //
+        }
+    },
+    filters:{
+        date(time){
+            let oldDate = new Date(time)
+            let newDate = new Date()
+            var dayNum = "";
+            var getTime = (newDate.getTime() - oldDate.getTime())/1000;
+
+            if(getTime < 60*5){
+                dayNum = "刚刚";
+            }else if(getTime >= 60*5 && getTime < 60*60){
+                dayNum = parseInt(getTime / 60) + "分钟前";
+            }else if(getTime >= 3600 && getTime < 3600*24){
+                dayNum = parseInt(getTime / 3600) + "小时前";
+            }else if(getTime >= 3600 * 24 && getTime < 3600 * 24 * 30){
+                dayNum = parseInt(getTime / 3600 / 24 ) + "天前";
+            }else if(getTime >= 3600 * 24 * 30 && getTime < 3600 * 24 * 30 * 12){
+                dayNum = parseInt(getTime / 3600 / 24 / 30 ) + "个月前";  
+            }else if(time >= 3600 * 24 * 30 * 12){
+                dayNum = parseInt(getTime / 3600 / 24 / 30 / 12 ) + "年前";  
+            }
+
+            let year   = oldDate.getFullYear();
+            let month  = oldDate.getMonth()+1;
+            let day    = oldDate.getDate();
+            let hour   = oldDate.getHours(); 
+            let minute = oldDate.getMinutes(); 
+            let second = oldDate.getSeconds(); 
+            return hour+":"+minute;
+        },
+        datesj(time){
+            let oldDate = new Date(time)
+            let newDate = new Date()
+            var dayNum = "";
+            var getTime = (newDate.getTime() - oldDate.getTime())/1000;
+
+            if(getTime < 60*5){
+                dayNum = "刚刚";
+            }else if(getTime >= 60*5 && getTime < 60*60){
+                dayNum = parseInt(getTime / 60) + "分钟前";
+            }else if(getTime >= 3600 && getTime < 3600*24){
+                dayNum = parseInt(getTime / 3600) + "小时前";
+            }else if(getTime >= 3600 * 24 && getTime < 3600 * 24 * 30){
+                dayNum = parseInt(getTime / 3600 / 24 ) + "天前";
+            }else if(getTime >= 3600 * 24 * 30 && getTime < 3600 * 24 * 30 * 12){
+                dayNum = parseInt(getTime / 3600 / 24 / 30 ) + "个月前";  
+            }else if(time >= 3600 * 24 * 30 * 12){
+                dayNum = parseInt(getTime / 3600 / 24 / 30 / 12 ) + "年前";  
+            }
+
+            let year   = oldDate.getFullYear();
+            let month  = oldDate.getMonth()+1;
+            let day    = oldDate.getDate();
+            let hour   = oldDate.getHours(); 
+            let minute = oldDate.getMinutes(); 
+            let second = oldDate.getSeconds(); 
+            return year+"-"+month+"-"+day
         }
     }
    

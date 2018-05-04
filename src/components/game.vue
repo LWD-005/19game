@@ -22,22 +22,22 @@
           </router-link>
         </div>
         <div class="wrap_icon">
-          <a href="http://">
+          <a  @click="zwkf">
             <img src="../../static/img/kaifu.png">
             <p class="wrap_bt">开服</p>
           </a>
         </div>
         <div class="wrap_icon">
-          <a href="http://">
+          <a @click="zwkf">
             <img src="../../static/img/huodong.png">
             <p class="wrap_bt">活动</p>
           </a>
         </div>
         <div class="wrap_icon">
-          <a href="http://">
+          <router-link :to="{path:'/giftbag'}">
             <img src="../../static/img/miaosha.png">
             <p class="wrap_bt">秒杀</p>
-          </a>
+          </router-link>
         </div>
       </div>
       <div class="sy_hero">
@@ -147,7 +147,7 @@ export default {
     },
     loadMore() {
         this.page++;
-        console.log(this.page)
+        
         this.get_data1();
     },
     get_data1() {
@@ -182,6 +182,9 @@ export default {
             }
         })
     //
+    },
+    zwkf(){
+      alert("暂未开放！")
     }
   },
   created(){
