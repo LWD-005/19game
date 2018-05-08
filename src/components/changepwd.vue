@@ -95,7 +95,7 @@ export default {
     },
     created:function(){
         let apiUrl=this.common.apiUrl;
-         let tokenLogin = window.localStorage.getItem('token');
+        let tokenLogin = window.localStorage.getItem('token');
         if(tokenLogin==undefined){
             this.loginPhone ==''
         }else{
@@ -115,7 +115,7 @@ export default {
                 }
             })
             .catch((error)=>{
-                console.log(error);
+                console.log(error.status);
                 alert("网络错误，不能访问！");
             })
         }
@@ -222,37 +222,14 @@ export default {
             alert("密码不能为空！")
         }else{
             let apiUrl=this.common.apiUrl;
-            if (window.localStorage.getItem('token')==undefined) {
+            let tokenLogin = window.localStorage.getItem('token');
+            // if (window.localStorage.getItem('token')==undefined) {
                 Axios({
                     method:'post',      
                     url:apiUrl+'Cis/Login',
                     params:{
                         phone:this.loginPhone,
-                        password:this.loginPwd
-                    },
-                    headers: {
-                        "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
-                    },
-                })
-                .then((res)=>{
-                    if(res.status==200){
-                        window.localStorage.setItem('token',res.data.token);
-                        window.sessionStorage.setItem('name',res.data.d.name);
-                        window.sessionStorage.setItem('coin',res.data.d.coin);
-                        window.sessionStorage.setItem('dlzt',1);
-                        this.$router.push({path:'/'});
-                    }
-                })
-                .catch((error)=>{
-                    console.log(error);
-                    alert("网络错误，不能访问！");
-                })
-            } else {
-                let tokenLogin = window.localStorage.getItem('token');
-                Axios({
-                    method:'post',      
-                    url:apiUrl+'Cis/Token',
-                    params:{
+                        password:this.loginPwd,
                         token:tokenLogin
                     },
                     headers: {
@@ -261,17 +238,24 @@ export default {
                 })
                 .then((res)=>{
                     if(res.status==200){
-                        window.sessionStorage.setItem('dlzt',1);
-                        window.sessionStorage.setItem('name',res.data.d.name);
-                        window.sessionStorage.setItem('coin',res.data.d.coin);
-                        this.$router.push({path:'/'});
+                        if (res.data.d.s=='FAIL') {
+                            alert(res.data.d.m);
+                        } else {
+                            window.localStorage.setItem('token',res.data.token);
+                            window.sessionStorage.setItem('name',res.data.d.name);
+                            window.sessionStorage.setItem('coin',res.data.d.coin);
+                            window.sessionStorage.setItem('dlzt',1);
+                            window.sessionStorage.setItem('isSign',res.data.d.isSign);
+                            this.$router.push({path:'/'});
+                        }
+
                     }
                 })
                 .catch((error)=>{
                     console.log(error);
                     alert("网络错误，不能访问！");
                 })
-            }
+           
         }
         
     },

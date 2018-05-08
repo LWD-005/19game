@@ -9,7 +9,7 @@
               </div>
               <div class="wd_mc">{{name}}</div>
               <div class="wd_qd">
-                <a v-if="qd==1" class="qd_btn">已签到</a>
+                <a v-if="isSign==1" class="qd_btn">已签到</a>
                 <yd-button v-else class="qd_btn go_qd" @click.native="signIn">去签到</yd-button>
                 <!-- 点击去签到弹窗内容 -->
                 <yd-popup v-model="qd_show" position="center" width="5.02rem">
@@ -19,14 +19,14 @@
                         <p class="sigIn_7day">连续签到7天可获得大礼包</p>
                         <div class="sigIn_day">
                           <div class="numDay" v-for="(item,index) in log" :key="index">
-                            <div class="numDay_bg active" v-if="item.is_sign==1">{{index+1}}</div>
-                            <div class="numDay_bg" v-else>{{index+1}}</div>
+                            <div class="numDay_bg active" v-if="item.is_sign==1">{{parseInt(index)+1}}</div>
+                            <div class="numDay_bg" v-else>{{parseInt(index)+1}}</div>
                             <p class="oneIntegral">{{item.get}}积分</p>
                           </div>
 
                         </div>
                         
-                         <a class="sigIn_btn"><span>已经连续签到1天</span></a>
+                         <a class="sigIn_btn"><span>已经连续签到{{continu}}天</span></a>
                     </div>
                    
                 </yd-popup>
@@ -113,7 +113,9 @@ export default {
       qd_show:false,
       name:'',
       coin:'',
-      log:[]
+      log:[],
+      isSign:'',
+      continu:""
     }
     
   },
@@ -121,6 +123,7 @@ export default {
     
     this.name = window.sessionStorage.getItem('name')
     this.coin = window.sessionStorage.getItem('coin')
+    this.isSign = window.sessionStorage.getItem('isSign')
     const dlzt =window.sessionStorage.getItem('dlzt')
     if (dlzt==null) {
       this.dlzt=2;
@@ -143,9 +146,9 @@ export default {
         },
       })
       .then((res)=>{
-        this.qd_show=true
-        this.qd = 1
-        this.log = res.data.d.log
+          this.qd_show=true;
+          this.continu = res.data.d.continu;
+          this.log = res.data.d.log;
       })
       .catch((error)=>{
         alert("网络错误，不能访问！");

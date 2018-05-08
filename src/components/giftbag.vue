@@ -34,7 +34,7 @@
                                 </div>
                             </div>
                             <div class="list_btn">
-                                <yd-button v-if="item.status==1" class="get_btn"  @click.native="show1=true"><span>领取</span></yd-button>
+                                <yd-button v-if="item.status==1" class="get_btn"  @click.native="show1=true"><span >领取</span></yd-button>
                                 <a href="" v-else-if="item.status==2" class="a_btn yqg" >已领取</a>
                                 <a href="" v-else  class="a_btn ylq" >已抢光</a>
                             </div>
