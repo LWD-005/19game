@@ -226,8 +226,8 @@ export default {
     });
   },
  
-    
-  
+
+ 
 }
 
 </script>
@@ -242,7 +242,7 @@ export default {
 }
 .banner {
   img{
-    width: 6.4rem;
+    width: 100%;
     height: 2.8rem;
   }
   

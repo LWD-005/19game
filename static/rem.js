@@ -23,3 +23,4 @@
     if (!doc.addEventListener) return;
     win.addEventListener(resizeEvt, recalc, false);
 })(document, window);
+

@@ -153,7 +153,7 @@ export default {
             })
         },
         isGame(gameName,gameId){
-            this.is_game=gameName
+            this.is_game=gameName;
             this.gameid = gameId
         },
         serverList:function(){
@@ -179,7 +179,7 @@ export default {
             })
         },
         isServer(serverName,serverId){
-            this.is_server=serverName
+            this.is_server=serverName;
             this.serverid = serverId
         },
         roleList:function(){
@@ -232,8 +232,7 @@ export default {
                     },
                 })
                 .then((res)=>{
-                    alert(res.data.d.m)
-                    console.log(res)
+                    alert(res.data.d.m);
                 })
                 .catch((error)=>{
                     alert('网络错误，不能访问')

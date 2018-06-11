@@ -1,5 +1,10 @@
 <template>
   <div class="download">
+      <div class="share_header">
+          <div class="share_back"  @click="$router.go(-1);">
+              <img :src="imgSrc+'back.png'" alt="">
+          </div>
+      </div>
       <div class="down_header">
           <div class="down_banner">
               <img src="../../static/img/download_banner.png" alt="">
@@ -48,7 +53,8 @@ import Axios from 'axios'
 export default {
     data(){
         return{
-            Detail:''
+            Detail:'',
+            imgSrc:this.common.imgSrc,
         }
     },
   created:function(){
@@ -75,6 +81,17 @@ export default {
 
 <style lang="less" scoped>
 .download{
+    .share_back{
+        position: absolute;
+        width: .18rem;
+        height: .32rem;
+        margin-left: .42rem;
+        margin-top: .27rem;
+        img{
+            width: 100%;
+            height: 100%;
+        }
+    }
     .down_header{
         .down_banner{
             width: 100%;

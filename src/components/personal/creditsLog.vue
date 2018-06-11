@@ -13,13 +13,13 @@
                         <div  v-for="(item, index) in pointsList" :key="index" >
                             <div class="prepaidTime" v-if="item.time ==item.time">
                                 <img :src="imgSrc+'prepaidTime_icon.png'" alt="">
-                                <span class="prepaid_time"><span class="prepaid_day">{{item.time | datesj}}</span><span class="prepaid_noon"></span></span>
+                                <span class="prepaid_time"><span class="prepaid_day">{{item.time.replace(/-/g,"/") | datesj}}</span><span class="prepaid_noon"></span></span>
                             </div>
                             <div class="buyPoints" v-if="item.type==2">
                                 <img :src="imgSrc+'convert_icon.png'" alt="">
                                 <div class="points">
                                     <p class="points_tit">积分兑换</p>
-                                    <p class="buy_time">{{item.time | date}}</p>
+                                    <p class="buy_time">{{item.time.replace(/-/g,"/") | date}}</p>
                                 </div>
                                 <div class="convert_num">
                                     <span class="num">-{{item.count}}<i class="num_icon"></i></span>
@@ -29,7 +29,7 @@
                                 <img :src="imgSrc+'prepaid_icon.png'" alt="">
                                 <div class="points">
                                     <p class="points_tit">积分充值</p>
-                                    <p class="buy_time">{{item.time | date}}</p>
+                                    <p class="buy_time">{{item.time.replace(/-/g,"/") | date}}</p>
                                 </div>
                                 <div class="points_sum">
                                     <span class="sum">+{{item.count}}<i class="buy_icon"></i></span>
@@ -132,7 +132,7 @@ export default {
                     this.$refs.infinitescrollDemo.$emit("ydui.infinitescroll.reInit");
                 }
             })
-        //
+        
         }
     },
     filters:{

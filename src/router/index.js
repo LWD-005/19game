@@ -20,7 +20,7 @@ Vue.component('my-nav',Nav)
 
 export default new Router({
   linkActiveClass: 'active',
-  mode:'history',
+  // mode:'history',
   routes: [              //配置路由，这里是个数组
     {                    //每一个链接都是一个对象
       path: '/',         //链接路径
@@ -70,3 +70,4 @@ export default new Router({
   
 
 })
+ 

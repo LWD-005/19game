@@ -1,5 +1,10 @@
 <template>
   <div class="xgmm">
+      <div class="share_header">
+          <div class="share_back"  @click="$router.go(-1);">
+              <img :src="imgSrc+'creditsLog_back.png'" alt="">
+          </div>
+      </div>
      <div class="logo">
          <img src="../../static/img/logo.png">
      </div>
@@ -25,8 +30,33 @@
              </div>
              <input type="password" placeholder="请输入6-16位密码" class="login_ipt phone_ipt" v-model="pwd">
         </div>
-        <a @click="query" class="review_btn register_btn"><span>注册</span></a>
+        <a class="review_btn register_btn" @click="query" v-if="isAgree==true"><span>注册</span></a>
+        <yd-button class="lottery_rule" @click.native="resShow = true" v-else>
+            <a class="review_btn register_btn"><span>注册</span></a>
+        </yd-button>
          <p class="agree">注册即代表同意<a class="agree_a" href="">《19游戏用户注册协议》</a></p>
+         <!-- 注册提示弹窗 -->
+        <yd-popup v-model="resShow" position="center" width="5.2rem">
+            <div class="rule_win">
+                <div class="ruleHeader">注册协议及隐私政策</div>
+                <div class="rule_p">
+                    <p>
+                    活动时间：2017年4月24日-27日，共4天
+                    </p>
+                    <p>
+                        活动规则：活动期间内，通过当当购物手机客户端成功购买图书的用户，均视为成功参与此次活动；每个用户只可参与一次。
+                    </p>
+                    <p>活动奖励：成功参与此次活动的用户，均可获得10元当当网自营图书音像现金券，此礼券当当网自营图书音像品类通用，无最低消费限制，不可用于其他类商品交易；现金券有效期5月1日-5月31日，礼券不可转让、不可返现。</p>
+                    <p>奖品发放：交易完成后，3个工作日内发送至参与用户账号</p>
+                    <p>补充说明：此次活动不与当当网客户端用户首单奖励5元活动冲突，可同时参与。</p>
+                    <p>此次活动最终解释权归当当网所有。</p>
+                </div>
+                <div class="rule_btn">
+                    <a class="disagree" @click="resShow = false">不同意</a>
+                    <a class="agreeBtn" @click="Agree">同意</a>
+                </div>
+            </div>
+        </yd-popup>
      </div>
      <!-- 登陆页 -->
     <div class="login login_page"  v-if="loginId == 'login'">
@@ -78,6 +108,7 @@ import Axios from 'axios'
 export default {
     data(){
          return{
+            imgSrc:this.common.imgSrc,
             loginId:this.$route.query.id,
             disabled:false,
             time:0,
@@ -91,6 +122,8 @@ export default {
             forgetPhone:'',
             forgetPwd:'',
             forgetCode:'',
+            resShow:false,
+            isAgree:false
          }
     },
     created:function(){
@@ -123,17 +156,17 @@ export default {
     methods:{
      register(){
          this.$router.replace({path:'/changepwd',query:{id:'register'}});
-        window.location.reload()
+        window.location.reload();
      },
     changepwd(){
         this.$router.push({path:'/changepwd',query:{id:'changepwd'}});
-        window.location.reload()
+        window.location.reload();
     },
      //验证手机号码部分
     sendcode(){
-        var reg=11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/;
+        var reg=11 && /^((13|14|15|16|17|18)[0-9]{1}\d{8})$/;
         if(this.phone==''){
-            alert("请输入手机号码！");
+
             if(reg.test(this.phone)){
                 this.isShow=false;
                 let apiUrl=this.common.apiUrl;
@@ -214,6 +247,11 @@ export default {
                 alert("网络错误，不能访问！");
             })
         }
+    },
+    // 判断是否同意注册协议
+    Agree(){
+        this.isAgree = true;
+        this.resShow = false;
     },
     Login(){
         if(this.loginPhone==""){
@@ -334,7 +372,87 @@ export default {
 </script>
 
 <style lang="less" scoped>
+// 注册弹窗样式
+    .yd-btn-primary{
+        background: #fff;
+    }
+    .rule_win{
+        width: 5.2rem;
+        height: 6rem;
+        background: #fff;
+        border-radius: .08rem;
+        .ruleHeader{
+            width: 100%;
+            height: .7rem;
+            line-height: .7rem;
+            text-align: center;
+            color: #000;
+            font-size: .24rem;
+            font-weight: bold;
+            border-bottom: .01rem solid #d7d7d7;    
+        }
+        .rule_p{
+            padding: .2rem .25rem 0 .25rem;
+            height: 4.2rem;
+            overflow-y: auto;
+            p{
+                font-size: .18rem;
+                color: #8c8c8c;
+                text-align: justify;
+                line-height: .3rem;
+            }
+        }
+        .rule_btn{
+            width: 100%;
+            position: absolute;
+            bottom: .3rem;
+            a{
+                display: inline-block;
+                width: 35%;
+                font-size: .24rem;
+                height: .6rem;
+                line-height: .6rem;
+                border-radius: .03rem;
+                text-align: center;
+            }
+            .agreeBtn{
+                background: #e9383d;
+                border: .01rem solid #e9383d;
+                float: right;
+                color: #fff;
+                margin-right: .4rem;
+            }
+            .disagree{
+                background: #fff;
+                float: left;
+                color: #000;
+                border: .01rem solid #d7d7d7;
+                margin-left: .4rem;
+            }
+        }
+    }
+    .rule_winClose{
+        width: .27rem;
+        height: .27rem;
+        background: url(../../static/img/gitfbag_winClose.png) no-repeat;
+        background-size: .27rem .27rem;
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+    // 注册弹窗样式end
     .xgmm{
+        .share_back{
+            position: absolute;
+            width: .18rem;
+            height: .32rem;
+            margin-left: .42rem;
+            margin-top: .27rem;
+            img{
+                width: 100%;
+                height: 100%;
+            }
+        }
         .logo{
             position: relative;
             top: 1.64rem;

@@ -15,7 +15,7 @@ export default {
     }
   },
   created(){
-        console.log(111);
+
         var click=false;
 var lottery={
     index:-1,    //当前转动到哪个位置，起点位置
@@ -84,7 +84,7 @@ function roll(){
 };
         lottery.init('lottery');
         $("#lottery a").click(function(){
-            console.log(1112)
+          
             if (click) {//click控制一次抽奖过程中不能重复点击抽奖按钮，后面的点击不响应
                 return false;
             }else{

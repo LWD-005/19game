@@ -121,10 +121,10 @@ export default {
   },
   created:function(){
     
-    this.name = window.sessionStorage.getItem('name')
-    this.coin = window.sessionStorage.getItem('coin')
-    this.isSign = window.sessionStorage.getItem('isSign')
-    const dlzt =window.sessionStorage.getItem('dlzt')
+    this.name = window.sessionStorage.getItem('name');
+    this.coin = window.sessionStorage.getItem('coin');
+    this.isSign = window.sessionStorage.getItem('isSign');
+    const dlzt =window.sessionStorage.getItem('dlzt');
     if (dlzt==null) {
       this.dlzt=2;
     }else{
@@ -161,7 +161,7 @@ export default {
       if (this.dlzt==1) {
         this.$router.push({path:'/personal/lottery'});
       } else {
-        this.$router.push({path:'/changepwd',query:{id:'login'}});
+        alert("未登录，请先登录再操作");
       }
         
     },
@@ -169,7 +169,7 @@ export default {
       if (this.dlzt==1) {
         this.$router.push({path:'/personal/share'});
       } else {
-        this.$router.push({path:'/changepwd',query:{id:'login'}});
+        alert("未登录，请先登录再操作");
       }
       
     },
@@ -177,16 +177,16 @@ export default {
       if (this.dlzt==1) {
         this.$router.push({path:'/personal/creditsLog'});
       } else {
-        this.$router.push({path:'/changepwd',query:{id:'login'}});
+        alert("未登录，请先登录再操作");
       }
       
     },
     Noyer(){
-      alert("该功能暂未开放")
+      alert("该功能暂未开放");
     },
     Integra(){
       if (this.dlzt==1) {
-        alert("积分提现请到公众号")
+        alert("积分提现请到公众号");
       } else {
         this.$router.push({path:'/changepwd',query:{id:'login'}});
       }
@@ -198,9 +198,9 @@ export default {
 <style lang="less" scoped>
 .wd{
   height: auto;
-  width: 6.4rem;
+  width: 100%;
   background: url(../../static/img/wd_bg.png) no-repeat;
-  background-size: 6.4rem 3.04rem;
+  background-size: 100% 3.04rem;
   .wd_cont{
     padding: 1.42rem .3rem 0 .3rem;
     .wd_header{
@@ -288,7 +288,7 @@ export default {
             position: absolute;
             top: -.02rem;
             left: .55rem;
-            width: .96rem;
+            width: 1.6rem;
           }
         }
       }

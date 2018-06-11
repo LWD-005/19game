@@ -35,36 +35,60 @@
                 <div class="luck-wrapper">
                     <ul class="nineGrid">
                         <li class="row">
-                            <div v-for="(n, key) in 3" :key="n" :class="index === key ? `active` : ``">
+                            <div :class="index === 1 ? `active` : ``">
                                 <div class="wrapper">
-                                <img :src="imgSrc+'lottery_icon.png'" alt="">
+                                <img :src="imgSrc+'5jf.png'" alt="">
                                 </div>
-                                <div class="mask"></div>
+                                <!-- <div class="mask"></div> -->
+                            </div>
+                            <div :class="index === 2 ? `active` : ``">
+                                <div class="wrapper">
+                                <img :src="imgSrc+'10jf.png'" alt="">
+                                </div>
+                                <!-- <div class="mask"></div> -->
+                            </div>
+                            <div :class="index === 3 ? `active` : ``">
+                                <div class="wrapper">
+                                <img :src="imgSrc+'50jf.png'" alt="">
+                                </div>
+                                <!-- <div class="mask"></div> -->
                             </div>
                         </li>
                         <li class="row">
-                            <div :class="index === 7 ? 'active': ''">
+                            <div :class="index === 0 ? 'active': ''">
                                 <div class="wrapper">
-                                <img :src="imgSrc+'lottery_icon.png'" alt="">
+                                <img :src="imgSrc+'1yhb.png'" alt="" style="width:.84rem;height:1.15rem">
                                 </div>
-                                <div class="mask"></div>
+                                <!-- <div class="mask"></div> -->
                             </div>
                             <div class="getLuck" @click="startLottery">
                                 <div class="wrapper begin">
                                 <img :src="imgSrc+'lottery_begin.png'" alt="">
                                 </div>
                             </div>
-                            <div :class="index === 3 ? 'active': ''">
+                            <div :class="index === 4 ? 'active': ''">
                                 <div class="wrapper">
-                                <img :src="imgSrc+'lottery_icon.png'" alt="">
+                                <img :src="imgSrc+'xxcy.png'" alt="" style="width:.94rem;height:1.14rem">
                                 </div>
-                                <div class="mask"></div>
+                                <!-- <div class="mask"></div> -->
                             </div>
                         </li>
                         <li class="row">
-                            <div v-for="(n, key) in 3" :key="n" :class="index === 6-key ? `active` : ``">
+                            <div :class="index === 7 ? `active` : ``">
                                 <div class="wrapper">
-                                <img :src="imgSrc+'lottery_icon.png'" alt="">
+                                <img :src="imgSrc+'5yhf.png'" alt="" style="width:1rem;height:.98rem">
+                                </div>
+                                <!-- <div class="mask"></div> -->
+                            </div>
+                            <div :class="index === 6 ? `active` : ``">
+                                <div class="wrapper">
+                                <img :src="imgSrc+'10yhf.png'" alt="" style="width:1rem;height:.98rem">
+                                </div>
+                                <!-- <div class="mask"></div> -->
+                            </div>
+                            <div :class="index === 5 ? `active` : ``">
+                                <div class="wrapper">
+                                <img :src="imgSrc+'66yhb.png'" alt="" style="width:.99rem;height:1.14rem">
                                 </div>
                                 <div class="mask"></div>
                             </div>
@@ -118,6 +142,7 @@
 </template>
 
 <script>
+import Axios from 'axios'
 export default {
   name: 'luckDraw',
   data () {
@@ -134,6 +159,7 @@ export default {
       cycle: 50,   // 转动基本次数：即至少需要转动多少次再进入抽奖环节
       prize: -1,   // 中奖位置
       click: true,
+      integral:'',//积分状态
       showToast: false,
       toastType: 'luck',
       recList:[
@@ -230,12 +256,40 @@ export default {
       this.showToast = false
     },
   },
+    created(){
+        let apiUrl=this.common.apiUrl;
+        let tokenLogin = window.localStorage.getItem('token');
+        Axios({
+            method:'post', 
+            url:apiUrl+'Game/GetLottery',
+            params:{
+                token:tokenLogin,
+            },
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
+            },
+        })
+        .then((res)=>{
+            if(res.status==200){
+                if(res.data.d.s=='FAIL'){
+                    this.integral = res.data.d.m;
+                    console.log(this.integral)
+                }else{
+
+                }
+            }
+        })
+        .catch((error)=>{
+            console.log(error);
+            alert("网络错误，不能访问！");
+        })
+    }
 }
 </script>
 
 <style lang="less" scoped>
 .lottery{
-    width: 6.4rem;
+    width: 100%;
     height: 11.36rem;
     background: url(../../../static/img/lottery_bg.png) no-repeat;
     background-size: 100% 100%;
@@ -288,16 +342,20 @@ export default {
 // 抽奖九宫格转盘样式
 .luckDraw {
   .turntable-wrapper {
-       margin: 0 auto;
-      width: 5.82rem;
-      height: 5.9rem;
+        margin: 0 auto;
+        width: 5.82rem;
+        height: 6rem;
         position: relative;
         margin-top: .25rem;
+        border-radius: .07rem;
+        background: #d92c00;
     .luck-wrapper {
-      width:100%;
-      height: 100%;
-      margin: 0 auto;
-      position: relative;
+        width: 5.82rem;
+        height: 5.82rem;
+        background: #ff4a19;
+        position: relative;
+        border-radius: .07rem;
+        padding-top: .18rem;
       .integral {
         width: 100%;
         color: #6d2d00;
@@ -311,28 +369,28 @@ export default {
       }
 
       .nineGrid {
-        width: 100%;
-        height: 100%;
-        padding: .28rem;
-        background: #fff;
-         border-radius: 9px;
-         border-bottom: .08rem solid #ffd33e;
+        width: 5.45rem;
+        height: 5.45rem;
+        padding: .09rem;
+        background: #d23600;
+         border-radius: .07rem;
+         margin: 0 auto;
         li {
-          display: flex;
-        margin-bottom: .33rem;
+            display: flex;
+            margin-bottom: .13rem;
           > div {
-            width: 1.57rem;
-            height: 1.57rem;
+            width: 1.67rem;
+            height: 1.67rem;
             text-align: center;
             position: relative;
-            margin-right: .27rem;
+            margin-right: .12rem;
             .wrapper {
-              width: 1.57rem;
-              height: 1.57rem;
+              width: 1.67rem;
+              height: 1.67rem;
+              line-height: 1.67rem;
               margin: 0;
-            }
-            .begin{
-                height: 1.8rem;
+              background: #fff;
+              border-radius: .08rem;
             }
             img {
               width: 100%;
@@ -353,11 +411,18 @@ export default {
           }
 
           > div.active {
-            .mask {
-              display: block;
+            .wrapper{
+                background: #fff37b;
             }
           }
           
+        }
+        li:first-child{
+            img{
+                width: .81rem;
+                height: 1.14rem;
+            }
+
         }
 
         li:last-child {
@@ -369,7 +434,7 @@ export default {
 }
 .lotteryBottom{
     overflow: hidden;
-    padding: .28rem .23rem 0 .24rem;
+    padding: .1rem .23rem 0 .24rem;
     .lottery_rule{
         float: left;
         width: 1.23rem;

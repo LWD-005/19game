@@ -34,7 +34,7 @@ export default {
 
 <style lang="less" scoped>
 .share{
-    width: 6.4rem;
+    width:100%;
     height: 11.36rem;
     background: url(../../../static/img/share_bg.png) no-repeat;
     background-size: 100% 100%;
