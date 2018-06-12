@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import VueClipboard from 'vue-clipboard2'
 import Game from '@/components/game'//游戏首页
 import Giftbag from '@/components/giftbag'//礼包页
 import Personal from '@/components/personal'//个人中心页
@@ -7,13 +8,14 @@ import Changepwd from '@/components/changepwd'//登陆、修改密码、注册�
 import CreditsLog from '@/components/personal/creditsLog'//积分记录页
 import PayCenter from '@/components/personal/payCenter'//充值支付页
 import Share from '@/components/personal/share'//推广游戏分享页
-import Lottery from '@/components/personal/lottery'//积分抽奖享页
+import Lottery from '@/components/personal/lottery'//积分抽奖页
+import GiftRec from '@/components/personal/giftRec'//礼包记录页
 import Download from '@/components/download'//下载页、正文页
 import Nav from '@/components/nav'//底部导航公共组件
 
 
 Vue.use(Router)
-
+Vue.use(VueClipboard)
 Vue.component('my-nav',Nav)
 
 
@@ -62,6 +64,10 @@ export default new Router({
       path:'/download',
       name:'download',
       component:Download,
+    },{
+      path:'/personal/giftRec',
+      name:'giftRec',
+      component:GiftRec,
     }
   ],
   components:{

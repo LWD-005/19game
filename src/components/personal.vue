@@ -79,7 +79,7 @@
               </a>
             </div>
             <div class="wd_list lbjl">
-              <a @click="Noyer">
+              <a @click="giftRec">
                 <img src="../../static/img/wd_lbjl.png" alt="">
                 <span class="jfcj_tit">礼包记录</span>
                 <span class="wd_rg jfcj_rg"></span>
@@ -120,7 +120,7 @@ export default {
     
   },
   created:function(){
-    
+
     this.name = window.sessionStorage.getItem('name');
     this.coin = window.sessionStorage.getItem('coin');
     this.isSign = window.sessionStorage.getItem('isSign');
@@ -181,8 +181,19 @@ export default {
       }
       
     },
+    giftRec(){
+      if (this.dlzt==1) {
+        this.$router.push({path:'/personal/giftRec'});
+      } else {
+        alert("未登录，请先登录再操作");
+      }
+    },
     Noyer(){
-      alert("该功能暂未开放");
+      if (this.dlzt==1) {
+        this.$router.push({path:'/changepwd',query:{id:'changepwd'}});
+      } else {
+        alert("未登录，请先登录再操作");
+      }
     },
     Integra(){
       if (this.dlzt==1) {
