@@ -134,19 +134,17 @@ export default {
         gameList:function(){
             let apiUrl=this.common.apiUrl;
             let tokenLogin = window.localStorage.getItem('token');
+            //查询游戏区传参
+            let gameParams = new URLSearchParams();
+            gameParams.append('token', tokenLogin);
+            gameParams.append('type', 1);
             Axios({
                 method:'post',
                 url:apiUrl+'Game/GetRole',
-                params:{
-                    token:tokenLogin,
-                    type:1
-                },
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
-                },
+                data:gameParams,
             })
             .then((res)=>{
-                this.Glist=res.data.d.list
+                this.Glist=res.data.d
             })
             .catch((error)=>{
                 alert('网络错误，不能访问')
@@ -159,20 +157,21 @@ export default {
         serverList:function(){
             let apiUrl=this.common.apiUrl;
             let tokenLogin = window.localStorage.getItem('token');
+             //查询服务区传参
+            let serverParams = new URLSearchParams();
+            serverParams.append('token', tokenLogin);
+            serverParams.append('type',2);
+            serverParams.append('gameid',this.gameid);
             Axios({
                 method:'post',
                 url:apiUrl+'Game/GetRole',
-                params:{
-                    token:tokenLogin,
-                    type:2,
-                    gameid:this.gameid
-                },
+                data:serverParams,
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
                 },
             })
             .then((res)=>{
-                this.server=res.data.d.list
+                this.server=res.data.d
             })
             .catch((error)=>{
                 alert('网络错误，不能访问')
@@ -185,21 +184,22 @@ export default {
         roleList:function(){
             let apiUrl=this.common.apiUrl;
             let tokenLogin = window.localStorage.getItem('token');
+              //查询服务区传参
+            let roleParams = new URLSearchParams();
+            roleParams.append('token', tokenLogin);
+            roleParams.append('type',2);
+             roleParams.append('gameid', this.gameid);
+            roleParams.append('serverid',this.serverid);
             Axios({
                 method:'post',
                 url:apiUrl+'Game/GetRole',
-                params:{
-                    token:tokenLogin,
-                    type:2,
-                    gameid:this.gameid,
-                    serverid:this.serverid
-                },
+                data:roleParams,
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
                 },
             })
             .then((res)=>{
-                this.role=res.data.d.list
+                this.role=res.data.d
             })
             .catch((error)=>{
                 alert('网络错误，不能访问')
@@ -218,15 +218,16 @@ export default {
             }else{
                 let apiUrl=this.common.apiUrl;
                 let tokenLogin = window.localStorage.getItem('token');
+                   //支付传参
+                let payParams = new URLSearchParams();
+                payParams.append('token', tokenLogin);
+                payParams.append('amount',this.amount);
+                payParams.append('gameid', this.gameid);
+                payParams.append('payway',this.payway);
                 Axios({
                     method:'post',
                     url:apiUrl+'Fina/Recharge',
-                    params:{ 
-                        token:tokenLogin,
-                        gameid:this.gameid,
-                        amount:this.amount,
-                        payway:this.payway
-                    },
+                    data:payParams,
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
                     },

@@ -135,12 +135,13 @@ export default {
     signIn(){
       let apiUrl=this.common.apiUrl;
       let tokenLogin = window.localStorage.getItem('token');
+      //游戏列表传参
+      let signParams = new URLSearchParams();
+      signParams.append('token',tokenLogin);
       Axios({
         method:'post',
         url:apiUrl+'Cis/SignIn',
-        params:{
-            token:tokenLogin
-        },
+        data:signParams,
         headers: {
             "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
         },

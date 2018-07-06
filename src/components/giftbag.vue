@@ -30,7 +30,7 @@
                                 <p class="list_tit"><span class="sp_tit">{{item.gamename}}</span><span class="fb_lb">{{item.gift_name}}</span></p>
                                 <div class="list_zt">
                                     <p class="hero_jj">{{item.content}}</p>
-                                    <p class="lbsy"><span class="lb_sy">剩余</span><span class="undown"><i :style="{width:(1-item.remain/item.count)*100+'%'}" class="down_i"></i></span><span class="sy_bfb">{{(item.remain/item.count)*100}}%</span></p>
+                                    <p class="lbsy"><span class="lb_sy">剩余</span><span class="undown"><i :style="{width:(1-(item.remain/item.count))*100+'%'}" class="down_i"></i></span><span class="sy_bfb">{{(item.remain/item.count).toFixed(2)*100}}%</span></p>
                                 </div>
                             </div>
                             <div class="list_btn">
@@ -111,13 +111,14 @@ export default {
     },
     created:function(){
         let apiUrl=this.common.apiUrl;
+        //礼包列表传参
+            let giftParams = new URLSearchParams();
+            giftParams.append('page', this.page);
+            giftParams.append('count', this.count);
             Axios({
                 method:'post',
                 url:apiUrl+'Game/GiftList',
-                params:{
-                    page:this.page,
-                    count:this.count
-                }
+                data:giftParams
             })
             .then((res)=>{
                 this.list=res.data.d.list;
@@ -139,16 +140,16 @@ export default {
             this.get_data1();
         },
         get_data1() {
-            let json = {
-                page: this.page,
-                count: this.count,
-            };
+            //礼包列表分页传参
+            let giftPageParams = new URLSearchParams();
+            giftPageParams.append('page', this.page);
+            giftPageParams.append('count', this.count);
 
             let apiUrl=this.common.apiUrl;
             Axios({
                 method:'post',
                 url:apiUrl+'Game/GiftList',
-                params:json
+                data:giftPageParams
             }).then((res)=>{
                 if (res.data != null) {
                     if (this.page== 1) {
@@ -174,15 +175,16 @@ export default {
         },
         fetchData(){
             let apiUrl=this.common.apiUrl;
+             //礼包搜索传参
+            let searchParams = new URLSearchParams();
+            searchParams.append('keywork',this.keywork);
             if(this.keywork==''){
                 this.search=''
             }else{
                 Axios({
                     method:'post',
                     url:apiUrl+'Game/GiftList',
-                    params:{
-                        keywork:this.keywork
-                    }
+                    data:searchParams
                 })
                 .then((res)=>{
                     this.search = res.data.d.list

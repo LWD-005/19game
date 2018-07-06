@@ -21,7 +21,7 @@
              <div class="phone_icon verification_icon">
                  <img src="../../static/img/verification.png" alt="">
              </div>
-             <input type="text" placeholder="请输入您的验证码" class="login_ipt phone_ipt">
+             <input type="text" placeholder="请输入您的验证码"  v-model='code' class="login_ipt phone_ipt">
              <button @click="sendcode" type="button" :disabled="disabled" class="verification_btn"><span>{{btntxt}}</span></button >
         </div>
          <div class="login_phone login_pwd">
@@ -115,6 +115,8 @@ export default {
             btntxt:"发送验证码",
             phone:'',
             pwd:"",
+            code:'',
+            sendCode:'',
             type:'',
             isShow:false,
             loginPhone:'',
@@ -129,15 +131,16 @@ export default {
     created:function(){
         let apiUrl=this.common.apiUrl;
         let tokenLogin = window.localStorage.getItem('token');
+          //登录页初始化传参
+        let createdParams = new URLSearchParams();
+        createdParams.append('token', tokenLogin);
         if(tokenLogin==undefined){
             this.loginPhone ==''
         }else{
             Axios({
                 method:'post',      
                 url:apiUrl+'Cis/Token',
-                params:{
-                    token:tokenLogin
-                },
+                data:createdParams,
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
                 },
@@ -165,17 +168,16 @@ export default {
      //验证手机号码部分
     sendcode(){
         var reg=11 && /^((13|14|15|16|17|18)[0-9]{1}\d{8})$/;
-        if(this.phone==''){
-
             if(reg.test(this.phone)){
                 this.isShow=false;
                 let apiUrl=this.common.apiUrl;
+                 //获取验证码传参
+                let sendcodeParams = new URLSearchParams();
+                sendcodeParams.append('phone', this.phone);
                 Axios({
                     method:'post', 
                     url:apiUrl+'Base/Sendsms',
-                    params:{
-                        phone:this.phone,
-                    },
+                    data:sendcodeParams,
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
                     },
@@ -199,7 +201,6 @@ export default {
             }else{
                 this.isShow=false
             }
-        }
     },
     timer() {
         if (this.time > 0) {
@@ -219,18 +220,21 @@ export default {
             alert("请输入6-16位密码！");
         }else if(this.pwd.length>15 || this.pwd.length<5){
             alert("密码格式不对！");
+        }else if(this.code==this.sendCode){
+            alert("验证码错误");
         }else{
-            console.log(this.pwd);
+
             let apiUrl=this.common.apiUrl;
+              //注册传参
+                let queryParams = new URLSearchParams();
+                queryParams.append('phone', this.phone);
+                queryParams.append('password', this.pwd);
+                queryParams.append('code', 1234);
+                queryParams.append('type',1);
            Axios({
                 method:'post',
                 url:apiUrl+'Cis/Register',
-                params:{
-                    phone:this.phone,
-                    password:this.pwd,
-                    code:1234,
-                    type:1
-                },
+                data:queryParams,
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
                 },
@@ -238,6 +242,7 @@ export default {
             .then((res)=>{
                 if(res.status==200){
                     alert("注册成功！");
+                    window.localStorage.setItem('token',res.data.token);
                     this.$router.push({path:'/changepwd',query:{id:'login'}});
                     window.location.reload()
                 }
@@ -261,15 +266,15 @@ export default {
         }else{
             let apiUrl=this.common.apiUrl;
             let tokenLogin = window.localStorage.getItem('token');
+                //登录传参
+            let loginParams = new URLSearchParams();
+            loginParams.append('phone', this.loginPhone);
+            loginParams.append('password', this.loginPwd);
             // if (window.localStorage.getItem('token')==undefined) {
                 Axios({
                     method:'post',      
                     url:apiUrl+'Cis/Login',
-                    params:{
-                        phone:this.loginPhone,
-                        password:this.loginPwd,
-                        token:tokenLogin
-                    },
+                    data:loginParams,
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
                     },
@@ -279,7 +284,7 @@ export default {
                         if (res.data.d.s=='FAIL') {
                             alert(res.data.d.m);
                         } else {
-                            window.localStorage.setItem('token',res.data.token);
+                            window.localStorage.setItem('token',res.data.d.token);
                             window.sessionStorage.setItem('name',res.data.d.name);
                             window.sessionStorage.setItem('coin',res.data.d.coin);
                             window.sessionStorage.setItem('dlzt',1);
@@ -303,12 +308,13 @@ export default {
             alert("请输入手机号码！");
         }else{
             let apiUrl=this.common.apiUrl;
+                //修改密码获取验证码传参
+            let ForgetSendParams = new URLSearchParams();
+            ForgetSendParams.append('phone', this.forgetPhone);
             Axios({
                 method:'post', 
                 url:apiUrl+'Base/Sendsms',
-                params:{
-                    phone:this.forgetPhone,
-                },
+                data:ForgetSendParams,
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
                 },
@@ -340,14 +346,15 @@ export default {
             alert("密码格式不对！");
         }else{
             let apiUrl=this.common.apiUrl;
+                //修改密码获取验证码传参
+            let ForgetParams = new URLSearchParams();
+            ForgetParams.append('phone', this.forgetPhone);
+            ForgetParams.append('password', this.forgetPwd);
+            ForgetParams.append('code',1234);
             Axios({
                 method:'post',      
                 url:apiUrl+'Cis/Forget',
-                params:{
-                    phone:this.forgetPhone,
-                    password:this.forgetPwd,
-                    code:1234
-                },
+                data:ForgetParams,
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
                 },

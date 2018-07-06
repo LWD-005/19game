@@ -259,12 +259,13 @@ export default {
     created(){
         let apiUrl=this.common.apiUrl;
         let tokenLogin = window.localStorage.getItem('token');
+        //抽奖初始值传参
+        let lotteryParams = new URLSearchParams();
+        lotteryParams.append('token', tokenLogin);
         Axios({
             method:'post', 
             url:apiUrl+'Game/GetLottery',
-            params:{
-                token:tokenLogin,
-            },
+            data:lotteryParams,
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
             },

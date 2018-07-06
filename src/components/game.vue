@@ -147,20 +147,19 @@ export default {
     },
     loadMore() {
         this.page++;
-        
         this.get_data1();
     },
+    
     get_data1() {
-        let json = {
-            page: this.page,
-            count: this.count,
-        };
-
         let apiUrl=this.common.apiUrl;
+        //游戏列表分页传参
+        let GamePageParams = new URLSearchParams();
+        GamePageParams.append('page', this.page);
+        GamePageParams.append('count', this.count);
         Axios({
             method:'post',
             url:apiUrl+'Game/GameList',
-            params:json
+             data:GamePageParams,
         }).then((res)=>{
             if (res.data != null) {
                 if (this.page== 1) {
@@ -189,6 +188,13 @@ export default {
   },
   created(){
     let apiUrl=this.common.apiUrl;
+    //热门游戏传参参数
+    let paramsHot = new URLSearchParams();
+    paramsHot.append('is_hot', '1');
+    //游戏列表传参
+    let GameLParams = new URLSearchParams();
+    GameLParams.append('page', this.page);
+    GameLParams.append('count', this.count);
     Axios.get(apiUrl+'Base/CarouselList')
     .then((res)=>{
     this.CarouselList=res.data.d.list;
@@ -200,9 +206,7 @@ export default {
     Axios({
       method:'post',
       url:apiUrl+'Game/GameList',
-      params:{
-        is_hot:"1"
-      },
+      data:paramsHot,
     }).then((res)=>{
       this.hotList=res.data.d.list;
     })
@@ -213,10 +217,7 @@ export default {
     Axios({
       method:'post',
       url:apiUrl+'Game/GameList',
-      params:{
-        page:this.page,
-        count:this.count
-      },
+      data:GameLParams
     }).then((res)=>{
       this.list=res.data.d.list;
     })

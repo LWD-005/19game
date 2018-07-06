@@ -60,12 +60,13 @@ export default {
   created:function(){
       let urlId = this.$route.query.id;
       let apiUrl=this.common.apiUrl;
+      //积分列表传参
+        let downloadParams = new URLSearchParams();
+        downloadParams.append('id',urlId);
         Axios({
             method:'post',
             url:apiUrl+'Game/GameDetail',
-            params:{
-                id:urlId
-            }
+            data:downloadParams,
         })
         .then((res)=>{
             this.Detail=res.data.d;

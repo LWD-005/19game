@@ -66,14 +66,15 @@ export default {
     created(){
         let apiUrl=this.common.apiUrl;
         let tokenLogin = window.localStorage.getItem('token');
+        //积分列表传参
+        let creditsParams = new URLSearchParams();
+        creditsParams.append('page', this.page);
+         creditsParams.append('token', tokenLogin);
+        creditsParams.append('count', 10);
         Axios({
             method:'post',
             url:apiUrl+'Fina/RechargeLog',
-            params:{
-                token:tokenLogin,
-                page:this.page,
-                count:10
-            },
+            data:creditsParams,
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
             },
@@ -101,17 +102,16 @@ export default {
         },
         get_data1() {
             let tokenLogin = window.localStorage.getItem('token');
-            let json = {
-                token:tokenLogin,
-                page: this.page,
-                count: this.count,
-            };
-
             let apiUrl=this.common.apiUrl;
+            //积分列表传参
+            let creditsPageParams = new URLSearchParams();
+            creditsPageParams.append('page', this.page);
+            creditsPageParams.append('token', tokenLogin);
+            creditsPageParams.append('count', this.count);
             Axios({
                 method:'post',
                 url:apiUrl+'Fina/RechargeLog',
-                params:json
+                data:creditsPageParams
             }).then((res)=>{
                 if (res.data != null) {
                     if (this.page== 1) {
