@@ -13,7 +13,7 @@
                 <yd-button v-else class="qd_btn go_qd" @click.native="signIn">去签到</yd-button>
                 <!-- 点击去签到弹窗内容 -->
                 <yd-popup v-model="qd_show" position="center" width="5.02rem">
-                    <div class="sigIn_winClose" @click="qd_show = false"></div>
+                    <div class="sigIn_winClose" @click="qd_show = false;isSign=1;"></div>
                     <div class="sigIn_win">
                         <p class="sigIn_tit">签到成功</p>
                         <p class="sigIn_7day">连续签到7天可获得大礼包</p>
@@ -115,23 +115,48 @@ export default {
       coin:'',
       log:[],
       isSign:'',
-      continu:""
+      continu:"",
     }
     
   },
   created:function(){
-
+    
     this.name = window.sessionStorage.getItem('name');
     this.coin = window.sessionStorage.getItem('coin');
-    this.isSign = window.sessionStorage.getItem('isSign');
+    this.isSign = window.localStorage.getItem('isSign');
     const dlzt =window.sessionStorage.getItem('dlzt');
     if (dlzt==null) {
       this.dlzt=2;
     }else{
       this.dlzt=dlzt
     }
+    this.getCoin();
   },
   methods:{
+    getCoin(){
+        //获取用户积分/api/cis/getUserCoin
+         let apiUrl=this.common.apiUrl;
+        let tokenLogin = window.localStorage.getItem('token');
+        let lotteryParams = new URLSearchParams();
+        lotteryParams.append('token', tokenLogin);
+        Axios({
+            method:'post', 
+            url:apiUrl+'/cis/getUserCoin',
+            data:lotteryParams,
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
+            },
+        })
+        .then((res)=>{
+            if(res.status==200){
+                this.coin = res.data.d.coin
+            }
+        })
+        .catch((error)=>{
+            console.log(error);
+            alert("网络错误，不能访问！");
+        })
+    },
     signIn(){
       let apiUrl=this.common.apiUrl;
       let tokenLogin = window.localStorage.getItem('token');
@@ -150,6 +175,8 @@ export default {
           this.qd_show=true;
           this.continu = res.data.d.continu;
           this.log = res.data.d.log;
+          window.localStorage.setItem('isSign',1);
+          this.getCoin();
       })
       .catch((error)=>{
         alert("网络错误，不能访问！");

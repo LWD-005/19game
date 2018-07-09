@@ -116,7 +116,6 @@ export default {
             phone:'',
             pwd:"",
             code:'',
-            sendCode:'',
             type:'',
             isShow:false,
             loginPhone:'',
@@ -220,8 +219,6 @@ export default {
             alert("请输入6-16位密码！");
         }else if(this.pwd.length>15 || this.pwd.length<5){
             alert("密码格式不对！");
-        }else if(this.code==this.sendCode){
-            alert("验证码错误");
         }else{
 
             let apiUrl=this.common.apiUrl;
@@ -229,7 +226,7 @@ export default {
                 let queryParams = new URLSearchParams();
                 queryParams.append('phone', this.phone);
                 queryParams.append('password', this.pwd);
-                queryParams.append('code', 1234);
+                queryParams.append('code', this.code);
                 queryParams.append('type',1);
            Axios({
                 method:'post',
@@ -288,7 +285,7 @@ export default {
                             window.sessionStorage.setItem('name',res.data.d.name);
                             window.sessionStorage.setItem('coin',res.data.d.coin);
                             window.sessionStorage.setItem('dlzt',1);
-                            window.sessionStorage.setItem('isSign',res.data.d.isSign);
+                            window.localStorage.setItem('isSign',res.data.d.isSign);
                             this.$router.push({path:'/'});
                         }
 
@@ -350,7 +347,7 @@ export default {
             let ForgetParams = new URLSearchParams();
             ForgetParams.append('phone', this.forgetPhone);
             ForgetParams.append('password', this.forgetPwd);
-            ForgetParams.append('code',1234);
+            ForgetParams.append('code',this.forgetCode);
             Axios({
                 method:'post',      
                 url:apiUrl+'Cis/Forget',

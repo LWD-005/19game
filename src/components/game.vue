@@ -93,8 +93,8 @@
                     </router-link>
                 </div>
                 <div class="list_btn">
-                    <a href="" v-if="item.btn_zt==1" class="a_btn hero_zt" >暂停</a>
-                    <a href="" v-else-if="item.btn_zt==2" class="a_btn jx_btn" >继续</a>
+                    <a v-if="item.btn_zt==1" class="a_btn hero_zt" >暂停</a>
+                    <a v-else-if="item.btn_zt==2" class="a_btn jx_btn" >继续</a>
                     <!-- <a href="" v-else class="a_btn" >下载</a> -->
                     <a :href="item.download_path" v-else class="Down_btn"><span>下载</span></a>
                     <p class="list_rl">{{item.size}}m</p>

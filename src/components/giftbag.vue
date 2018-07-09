@@ -34,9 +34,9 @@
                                 </div>
                             </div>
                             <div class="list_btn">
-                                <yd-button v-if="item.status==1" class="get_btn"  @click.native="show1=true"><span>领取</span></yd-button>
-                                <a href="" v-else-if="item.status==2" class="a_btn yqg" >已领取</a>
-                                <a href="" v-else  class="a_btn ylq" >已抢光</a>
+                                <yd-button v-if="item.status==1" class="get_btn"  @click.native="get(item.id)" :data-id='item.id'><span>领取</span></yd-button>
+                                <a v-else-if="item.status==2" class="a_btn yqg" >已领取</a>
+                                <a v-else  class="a_btn ylq" >已抢光</a>
                             </div>
                         </div>
                     </yd-list>
@@ -57,7 +57,7 @@
                         <a @click="show1 = false">
                             <img class="cont_receive" src="../../static/img/cont_receive.png" alt="">
                         </a>
-                        <a>
+                        <a @click="giftRec">
                             <img class="look_giftbag" src="../../static/img/look_giftbag.png" alt="">
                         </a>
                     </p>
@@ -112,22 +112,24 @@ export default {
     created:function(){
         let apiUrl=this.common.apiUrl;
         //礼包列表传参
-            let giftParams = new URLSearchParams();
-            giftParams.append('page', this.page);
-            giftParams.append('count', this.count);
-            Axios({
-                method:'post',
-                url:apiUrl+'Game/GiftList',
-                data:giftParams
-            })
-            .then((res)=>{
-                this.list=res.data.d.list;
+        let giftParams = new URLSearchParams();
+        let tokenLogin = window.localStorage.getItem('token');
+        giftParams.append('token',tokenLogin);
+        giftParams.append('page', this.page);
+        giftParams.append('count', this.count);
+        Axios({
+            method:'post',
+            url:apiUrl+'Game/GiftList',
+            data:giftParams
+        })
+        .then((res)=>{
+            this.list=res.data.d.list;
 
-            })
-            .catch((error)=>{
-                console.log(error);
-                alert("网络错误，不能访问");
-            })
+        })
+        .catch((error)=>{
+            console.log(error);
+            alert("网络错误，不能访问");
+        })
     },
     methods: {
         freshList() {
@@ -187,7 +189,7 @@ export default {
                     data:searchParams
                 })
                 .then((res)=>{
-                    this.search = res.data.d.list
+                    this.list = res.data.d.list
                 })
                 .catch((error)=>{
                     console.log(error);
@@ -195,8 +197,55 @@ export default {
                 })
             }
             
+        },
+        get(e){
+            let apiUrl=this.common.apiUrl;
+            let tokenLogin = window.localStorage.getItem('token');
+            //游戏列表传参
+            let getParams = new URLSearchParams();
+           getParams.append('token',tokenLogin);
+           getParams.append('gift_id', e);
+            this.show1 = true
+            Axios({
+                method:'post',
+                url:apiUrl+'Game/GetGift',
+                data:getParams
+            })
+            .then((res)=>{
+               let apiUrl=this.common.apiUrl;
+                //礼包列表传参
+                let giftParams = new URLSearchParams();
+                let tokenLogin = window.localStorage.getItem('token');
+                giftParams.append('token',tokenLogin);
+                giftParams.append('page', 1);
+                giftParams.append('count', this.count);
+                Axios({
+                    method:'post',
+                    url:apiUrl+'Game/GiftList',
+                    data:giftParams
+                })
+                .then((res)=>{
+                    this.list=res.data.d.list;
+
+                })
+                .catch((error)=>{
+                    console.log(error);
+                    alert("网络错误，不能访问");
+                })
+            })
+            .catch((error)=>{
+                console.log(error);
+                alert("网络错误，不能访问");
+            })
+        },
+        giftRec(){
+            if (this.dlzt==1) {
+                this.$router.push({path:'/personal/giftRec'});
+            } else {
+                alert("未登录，请先登录再操作");
+            }
         }
-      }
+    }
     
 }
 </script>

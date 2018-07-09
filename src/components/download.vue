@@ -15,7 +15,7 @@
               </div>
               <div class="down_gameTit">
                  <p class="list_tit">{{Detail.name}}</p>
-                <p class="list_xz"><span class="xz_rl">{{Detail.size}}MB</span><span class="xz_l">{{Detail.download}}万次下载</span></p>
+                <p class="list_xz"><span class="xz_rl">{{Detail.size}}</span><span class="xz_l">{{Detail.download}}万次下载</span></p>
                 <div class="list_zt">
                     <p class="hero_zt"> 
                         <a href="" class="zt_hh" v-for="(item,index) in Detail.category" :key="index">{{item}}</a>

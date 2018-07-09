@@ -5,7 +5,7 @@
               <img :src="imgSrc+'back.png'" alt="">
           </div>
           <div class="lottery_icon">
-              当前积分：9999
+              当前积分：{{coin}}
           </div>
       </div>
       <div class="exhibitors">
@@ -14,18 +14,10 @@
           </div>
           <div class="exhibitors_gd">
               <yd-slider autoplay="3000" speed="7000">
-                <yd-slider-item>
-                    恭喜 刘德华 抽中了 10 积分    
+                <yd-slider-item v-for="(item,index) in rollList" :key="index">
+                    恭喜{{item.user_name}}抽中了 {{item.name}}
                 </yd-slider-item>
-                <yd-slider-item>
-                    恭喜 刘德华 抽中了 10 积分
-                </yd-slider-item>
-                <yd-slider-item>
-                   恭喜 刘德华 抽中了 10 积分
-                </yd-slider-item>
-                <yd-slider-item>
-                    恭喜 刘德华 抽中了 10 积分
-                </yd-slider-item>
+                
             </yd-slider>
           </div>
       </div>
@@ -35,62 +27,62 @@
                 <div class="luck-wrapper">
                     <ul class="nineGrid">
                         <li class="row">
-                            <div :class="index === 1 ? `active` : ``">
+                            <div v-for="(item,index) in PrizeList" :key="index" v-if="index===1" :class="turnIndex === 1 ? `active` : ``">
                                 <div class="wrapper">
-                                <img :src="imgSrc+'5jf.png'" alt="">
+                                    <img :src="item.icon" alt="">
+                                    <span>{{item.name}}</span>
                                 </div>
-                                <!-- <div class="mask"></div> -->
                             </div>
-                            <div :class="index === 2 ? `active` : ``">
+                            <div v-for="(item,index) in PrizeList" :key="index" v-if="index===2" :class="turnIndex === 2 ? `active` : ``">
                                 <div class="wrapper">
-                                <img :src="imgSrc+'10jf.png'" alt="">
+                                    <img :src="item.icon" alt="">
+                                    <span>{{item.name}}</span>
                                 </div>
-                                <!-- <div class="mask"></div> -->
                             </div>
-                            <div :class="index === 3 ? `active` : ``">
+                            <div v-for="(item,index) in PrizeList" :key="index" v-if="index===3" :class="turnIndex === 3 ? `active` : ``">
                                 <div class="wrapper">
-                                <img :src="imgSrc+'50jf.png'" alt="">
+                                    <img :src="item.icon" alt="">
+                                    <span>{{item.name}}</span>
                                 </div>
-                                <!-- <div class="mask"></div> -->
                             </div>
                         </li>
                         <li class="row">
-                            <div :class="index === 0 ? 'active': ''">
+                            <div v-for="(item,index) in PrizeList" :key="index" v-if="index===0" :class="turnIndex === 0 ? `active` : ``">
                                 <div class="wrapper">
-                                <img :src="imgSrc+'1yhb.png'" alt="" style="width:.84rem;height:1.15rem">
+                                    <img :src="item.icon" alt="">
+                                    <span>{{item.name}}</span>
                                 </div>
-                                <!-- <div class="mask"></div> -->
                             </div>
                             <div class="getLuck" @click="startLottery">
                                 <div class="wrapper begin">
                                 <img :src="imgSrc+'lottery_begin.png'" alt="">
                                 </div>
                             </div>
-                            <div :class="index === 4 ? 'active': ''">
+                            <div v-for="(item,index) in PrizeList" :key="index" v-if="index===4" :class="turnIndex === 4 ? 'active': ''">
                                 <div class="wrapper">
-                                <img :src="imgSrc+'xxcy.png'" alt="" style="width:.94rem;height:1.14rem">
+                                    <img :src="item.icon" alt="">
+                                    <span>{{item.name}}</span>
                                 </div>
-                                <!-- <div class="mask"></div> -->
                             </div>
                         </li>
                         <li class="row">
-                            <div :class="index === 7 ? `active` : ``">
+                            <div v-for="(item,index) in PrizeList" :key="index" v-if="index===7" :class="turnIndex === 7 ? `active` : ``">
                                 <div class="wrapper">
-                                <img :src="imgSrc+'5yhf.png'" alt="" style="width:1rem;height:.98rem">
+                                    <img :src="item.icon" alt="">
+                                    <span>{{item.name}}</span>
                                 </div>
-                                <!-- <div class="mask"></div> -->
                             </div>
-                            <div :class="index === 6 ? `active` : ``">
+                            <div v-for="(item,index) in PrizeList" :key="index" v-if="index===6" :class="turnIndex === 6 ? `active` : ``">
                                 <div class="wrapper">
-                                <img :src="imgSrc+'10yhf.png'" alt="" style="width:1rem;height:.98rem">
+                                    <img :src="item.icon" alt="">
+                                    <span>{{item.name}}</span>
                                 </div>
-                                <!-- <div class="mask"></div> -->
                             </div>
-                            <div :class="index === 5 ? `active` : ``">
+                            <div v-for="(item,index) in PrizeList" :key="index" v-if="index===5" :class="turnIndex === 5 ? `active` : ``">
                                 <div class="wrapper">
-                                <img :src="imgSrc+'66yhb.png'" alt="" style="width:.99rem;height:1.14rem">
+                                    <img :src="item.icon" alt="">
+                                    <span>{{item.name}}</span>
                                 </div>
-                                <div class="mask"></div>
                             </div>
                         </li>
                     </ul>
@@ -106,17 +98,8 @@
             <yd-popup v-model="ruleShow" position="center" width="5.2rem">
                  <div class="rule_winClose" @click="ruleShow = false"></div>
                 <div class="rule_win">
-                   <div class="rule_p">
-                        <p>
-                        活动时间：2017年4月24日-27日，共4天
-                        </p>
-                        <p>
-                            活动规则：活动期间内，通过当当购物手机客户端成功购买图书的用户，均视为成功参与此次活动；每个用户只可参与一次。
-                        </p>
-                        <p>活动奖励：成功参与此次活动的用户，均可获得10元当当网自营图书音像现金券，此礼券当当网自营图书音像品类通用，无最低消费限制，不可用于其他类商品交易；现金券有效期5月1日-5月31日，礼券不可转让、不可返现。</p>
-                        <p>奖品发放：交易完成后，3个工作日内发送至参与用户账号</p>
-                        <p>补充说明：此次活动不与当当网客户端用户首单奖励5元活动冲突，可同时参与。</p>
-                        <p>此次活动最终解释权归当当网所有。</p>
+                   <div class="rule_p" v-html="rule">
+                      
                    </div>
                 </div>
             </yd-popup>
@@ -129,8 +112,8 @@
                 <div class="rec_win">
                     <div class="recWin_list">
                         <div class="recWin_cont" v-for="(item,index) in recList" :key="index" >
-                            <p class="recTime"><span class="recTime_day">{{item.recDay}}</span><span class="recTime_sj">{{item.recTime}}</span></p>
-                            <p class="rec_num">抽中 {{item.recNum}}积分</p>
+                            <p class="recTime"><span class="recTime_day">{{item.time | timestampToTime(2)}}</span><span class="recTime_sj">{{item.time | timestampToTime(3)}}</span></p>
+                            <p class="rec_num">抽中 {{item.name}}</p>
                         </div>
                     </div>
                 </div>
@@ -151,45 +134,23 @@ export default {
       ruleShow:false,
       recShow:false,
       title: '积分转盘',
-      index: -1,    // 当前转动到哪个位置，起点位置
+      turnIndex: -1,    // 当前转动到哪个位置，起点位置
       count: 8,    // 总共有多少个位置
       timer: 0,    // 每次转动定时器
       speed: 200,   // 初始转动速度
       times: 0,    // 转动次数
       cycle: 50,   // 转动基本次数：即至少需要转动多少次再进入抽奖环节
-      prize: -1,   // 中奖位置
+      prize: -1,   
       click: true,
       integral:'',//积分状态
       showToast: false,
       toastType: 'luck',
-      recList:[
-          {
-              recDay:"03-05",
-              recTime:"07:00 PM",
-              recNum:"10000万"
-          },
-          {
-              recDay:"03-05",
-              recTime:"07:00 PM",
-              recNum:"10000万"
-          },
-          {
-              recDay:"03-05",
-              recTime:"07:00 PM",
-              recNum:"10000万"
-          },
-          {
-              recDay:"03-05",
-              recTime:"07:00 PM",
-              recNum:"10000万"
-          },
-           {
-              recDay:"03-05",
-              recTime:"07:00 PM",
-              recNum:"10000万"
-          },
-      ]
-
+      PrizeList:'',//转盘奖品列表
+      prizeId:'',//中奖id
+      recList:'',//中奖记录
+      rollList:'',//中奖滚动列表
+      coin:'',//用户积分
+      rule:'',//抽奖戏规则
     }
   },
   methods: {
@@ -202,6 +163,7 @@ export default {
       this.speed = 200
       this.click = false
       this.startRoll()
+      this.prizeLocat()
     },
     // 开始转动
     startRoll () {
@@ -209,26 +171,27 @@ export default {
       this.oneRoll()  // 转动过程调用的每一次转动方法，这里是第一次调用初始化
 
       // 如果当前转动次数达到要求 && 目前转到的位置是中奖位置
-      if (this.times > this.cycle + 10 && this.prize === this.index) {
+      if (this.times > this.cycle + 10 && this.prize === this.turnIndex) {
         clearTimeout(this.timer)   // 清除转动定时器，停止转动
         this.prize = -1
         this.times = 0
         this.click = true
         this.showToast = true
         this.toastType = 'comeOn'
-        console.log('你已经中奖了')
+       
       } else {
         if (this.times < this.cycle) {
           this.speed -= 10   // 加快转动速度
         } else if (this.times === this.cycle) {    // 随机获得一个中奖位置
-          const index = parseInt(Math.random() * 10, 0) || 0
-          this.prize = index
+          const turnIndex = parseInt(Math.random() * 10, 0) || 0
+          this.prize = parseInt(this.prizeId)-1     //指定中奖位置
+          this.getCoin();
           if (this.prize > 7) {
             this.prize = 7
           }
-          console.log(`中奖位置${this.prize}`)
+         
         } else if (this.times > this.cycle + 10 &&
-          ((this.prize === 0 && this.index === 7) || this.prize === this.index + 1)) {
+          ((this.prize === 0 && this.turnIndex === 7) || this.prize === this.turnIndex + 1)) {
           this.speed += 110
         } else {
           this.speed += 20
@@ -242,24 +205,47 @@ export default {
 
     // 每一次转动
     oneRoll () {
-      let index = this.index  // 当前转动到哪个位置
+      let turnIndex = this.turnIndex  // 当前转动到哪个位置
       const count = this.count  // 总共有多少个位置
-      index += 1
-      if (index > count - 1) {
-        index = 0
+      turnIndex += 1
+      if (turnIndex > count - 1) {
+        turnIndex = 0
       }
-      this.index = index
+      this.turnIndex = turnIndex
     },
 
     // 关闭弹出框
     closeToast () {
       this.showToast = false
     },
-  },
-    created(){
+    getCoin(){
+        //获取用户积分/api/cis/getUserCoin
         let apiUrl=this.common.apiUrl;
         let tokenLogin = window.localStorage.getItem('token');
-        //抽奖初始值传参
+        let lotteryParams = new URLSearchParams();
+        lotteryParams.append('token', tokenLogin);
+        Axios({
+            method:'post', 
+            url:apiUrl+'/cis/getUserCoin',
+            data:lotteryParams,
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
+            },
+        })
+        .then((res)=>{
+            if(res.status==200){
+                this.coin = res.data.d.coin
+            }
+        })
+        .catch((error)=>{
+            console.log(error);
+            alert("网络错误，不能访问！");
+        })
+    },
+        //获取中奖位置
+    prizeLocat(){
+        let apiUrl=this.common.apiUrl;
+        let tokenLogin = window.localStorage.getItem('token');
         let lotteryParams = new URLSearchParams();
         lotteryParams.append('token', tokenLogin);
         Axios({
@@ -272,18 +258,107 @@ export default {
         })
         .then((res)=>{
             if(res.status==200){
-                if(res.data.d.s=='FAIL'){
-                    this.integral = res.data.d.m;
-                    console.log(this.integral)
-                }else{
-
-                }
+                this.prizeId = res.data.d.gift.id
             }
         })
         .catch((error)=>{
             console.log(error);
             alert("网络错误，不能访问！");
         })
+    }
+  },
+    created(){
+        let apiUrl=this.common.apiUrl;
+        let tokenLogin = window.localStorage.getItem('token');
+        //抽奖初始值传参
+        let lotteryParams = new URLSearchParams();
+        lotteryParams.append('token', tokenLogin);
+        //获取抽奖转盘列表
+        Axios({
+            method:'post', 
+            url:apiUrl+'Game/PrizeList',
+            data:lotteryParams,
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
+            },
+        })
+        .then((res)=>{
+            if(res.status==200){
+                this.PrizeList = res.data.d.list
+                this.rule = res.data.d.rule.content
+            }
+        })
+        .catch((error)=>{
+            console.log(error);
+            alert("网络错误，不能访问！");
+        });
+        
+        //获取中奖记录列表
+        Axios({
+            method:'post', 
+            url:apiUrl+'Game/LotteryLog',
+            data:lotteryParams,
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
+            },
+        })
+        .then((res)=>{
+            if(res.status==200){
+                this.recList = res.data.d.log
+            }
+        })
+        .catch((error)=>{
+            console.log(error);
+            alert("网络错误，不能访问！");
+        })
+        //获取中奖滚动列表
+        Axios({
+            method:'post', 
+            url:apiUrl+'Game/LotteryLog',
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
+            },
+        })
+        .then((res)=>{
+            if(res.status==200){
+                this.rollList = res.data.d.log
+            }
+        })
+        .catch((error)=>{
+            console.log(error);
+            alert("网络错误，不能访问！");
+        })
+        this.getCoin();
+    },
+    filters:{
+        timestampToTime(timestamp,format) {
+            let Y,M,D,h,m,s;
+            let date = new Date(timestamp * 1000);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+            Y = date.getFullYear() + '-';
+            if (format == 2) {
+                M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+            } else{
+                M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '/';
+            }
+            D = date.getDate() + ' ';
+            h = date.getHours() + ':';
+           if (date.getMinutes()<10) {
+               m ='0'+ date.getMinutes()
+           } else {
+               m =date.getMinutes()
+           }
+            s = date.getSeconds();
+            if (format == 3) {
+                if (h<13) {
+                    return h+m+' AM'
+                } else {
+                    return h+m+' PM'
+                }
+            } else{
+                return M+D;
+            }
+    
+        }
     }
 }
 </script>
@@ -388,17 +463,39 @@ export default {
             .wrapper {
               width: 1.67rem;
               height: 1.67rem;
-              line-height: 1.67rem;
               margin: 0;
               background: #fff;
               border-radius: .08rem;
+              position: relative;
+               img {
+                display: inline-block;
+                width: 1.02rem;  
+                height: 1.02rem;
+                vertical-align: middle;
+                margin-top: .2rem;
+                }
+                span{
+                    display: inline-block;
+                    height: .3rem;
+                    line-height: .3rem;
+                    width: 100%;
+                    position: absolute;
+                    bottom: .08rem;
+                    left: 0;
+                    overflow: hidden;
+                    font-size: .24rem;
+                    color: #d23600;
+                    font-family: "黑体";
+                    font-weight: bold;
+                }
             }
-            img {
-              width: 100%;
-              height: 100%;
-              vertical-align: middle;
+            .begin{
+                img{
+                    width: 100%;
+                    height: 100%;
+                    margin-top: 0;
+                }
             }
-
             .mask {
               position: absolute;
               top: 0;
@@ -418,13 +515,13 @@ export default {
           }
           
         }
-        li:first-child{
-            img{
-                width: .81rem;
-                height: 1.14rem;
-            }
+        // li:first-child{
+        //     img{
+        //         width: .81rem;
+        //         height: 1.14rem;
+        //     }
 
-        }
+        // }
 
         li:last-child {
           margin-bottom:0;
@@ -482,8 +579,15 @@ export default {
     height: 6rem;
     background: url(../../../static/img/recShow_bg.png) no-repeat;
     background-size: 100% 100%;
+    position: relative;
+    overflow: hidden;
     .recWin_list{
-        padding: 1.78rem .4rem 0 .73rem;
+        padding: 0 .4rem 0 .73rem;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 1.78rem;
+        overflow-y: auto;
         .recWin_cont{
            height: .82rem;
             .recTime{

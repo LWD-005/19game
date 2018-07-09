@@ -10,24 +10,51 @@
                 礼包记录
             </div>
             <div class="content">
-                <div class="container">
+                <div class="container" v-for="(item,index) in logList" :key="index">
                     <div class="giftIcon">
-                        <img :src="imgSrc+'giftIcon.png'" alt="">
+                        <img :src="item.icon" alt="">
                     </div>
-                    <div class="copyCont">{{message}}</div>
-                    <a class="copyBtn" v-clipboard:copy="message" v-clipboard:success="onCopy" v-clipboard:error="onError"><span>一键复制</span></a>
+                    <div class="copyCont">{{item.key}}</div>
+                    <a class="copyBtn" v-clipboard:copy="item.key" v-clipboard:success="onCopy" v-clipboard:error="onError"><span>一键复制</span></a>
                 </div>
+
+
+
+
+                
             </div>
         </div>
     </div>
 </template>
 <script>
+import Axios from 'axios'
 export default {
     data(){
         return {
-            message: '256-125-456-458-888',
-            imgSrc:this.common.imgSrc,
+            logList:'',
+            imgSrc:this.common.imgSrc
         }
+    },
+    created(){
+        let apiUrl=this.common.apiUrl;
+        //礼包列表传参
+        let logParams = new URLSearchParams();
+        let tokenLogin = window.localStorage.getItem('token');
+        logParams.append('token',tokenLogin);
+        logParams.append('page', 1);
+        Axios({
+            method:'post',
+            url:apiUrl+'Game/GiftLog',
+            data:logParams
+        })
+        .then((res)=>{
+            this.logList=res.data.d.log;
+
+        })
+        .catch((error)=>{
+            console.log(error);
+            alert("网络错误，不能访问");
+        })
     },
     methods: {
     onCopy: function (e) {
